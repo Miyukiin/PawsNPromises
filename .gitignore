@@ -2,9 +2,9 @@
 node_modules/
 
 # Frontend-specific ignores
-frontend-NextJs/.next/
-frontend-NextJs/out/
-frontend-NextJs/build
+Frontend/.next/
+Frontend/out/
+Frontend/build
 
 # Backend-specific ignores
 backend-Django/venv/
