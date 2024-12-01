@@ -19,7 +19,7 @@ const NavLink: React.FC<NavLinkProps> = ({ href, label }) => {
   return (
     <Link
       href={href}
-      className={`transition font-medium ${
+      className={` font-medium ${
         isActive
           ? 'text-primary font-semibold underline decoration-2 underline-offset-[8px]'
           : 'text-black hover:font-bold hover:text-primary'
