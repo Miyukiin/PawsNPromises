@@ -1,13 +1,11 @@
-// components/Footer.tsx
-
-'use client'; // Remove this line if the footer doesn't use client-side features
+'use client';
 
 import React from 'react';
 import Image from 'next/image';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#048C68] text-white py-12 px-6 lg:py-4 lg:px-12">
+    <footer className="bg-[#048C68] text-white py-8 px-6 lg:py-4 lg:px-12">
       <div className="flex flex-wrap justify-between items-center gap-4">
         {/* Leftmost Logo */}
         <div className="flex items-center">
@@ -23,8 +21,12 @@ const Footer: React.FC = () => {
 
         {/* Help Section */}
         <div>
-          <h6 className="text-[13px] mb-1">Help</h6>
           <ul className="space-y-1 text-[13px]">
+            <li>
+              <a href="#" className="hover:underline">
+                Help
+              </a>
+            </li>
             <li>
               <a href="#" className="hover:underline">
                 Terms & Conditions
