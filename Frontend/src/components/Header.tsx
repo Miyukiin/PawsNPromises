@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'react-feather'; // Icons for the hamburger menu
+import { Menu, X } from 'react-feather';
 
 interface NavLinkProps {
   href: string;
@@ -41,18 +41,16 @@ const Header: React.FC = () => {
   return (
     <header className="bg-white shadow-md fixed top-0 left-0 right-0 z-10">
       <div className="flex justify-between items-center px-4 py-4 md:px-12">
-        {/* Leftmost Logo */}
+        {/* Leftmost Logo (Now non-clickable) */}
         <div className="flex items-center">
-          <Link href="/home">
-            <Image
-              src="/image/header-pawsnpromises.png"
-              alt="Paws and Promises Logo"
-              width={300} 
-              height={120}
-              priority
-              className="w-auto h-auto max-w-[200px] md:max-w-[350px]"
-            />
-          </Link>
+          <Image
+            src="/image/header-pawsnpromises.png"
+            alt="Paws and Promises Logo"
+            width={300}
+            height={120}
+            priority
+            className="w-auto h-auto max-w-[200px] md:max-w-[350px]"
+          />
         </div>
 
         {/* Navigation Buttons on Large Screens */}
