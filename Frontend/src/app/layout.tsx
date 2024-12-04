@@ -15,7 +15,7 @@ const Layout = ({ children }: LayoutProps) => {
       </head>
       <body className="bg-white font-sans flex flex-col min-h-screen">
         <Header />
-        <main className="mt-16 flex-grow">{children}</main>
+        <main className="mt-12 flex-grow">{children}</main>
         <Footer />
       </body>
     </html>

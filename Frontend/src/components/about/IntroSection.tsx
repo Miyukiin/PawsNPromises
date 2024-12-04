@@ -4,7 +4,7 @@ import React from "react";
 
 const IntroSection: React.FC = () => {
   return (
-    <div className="flex flex-col items-start justify-center bg-gray-100 flex-grow">
+    <div className="flex flex-col items-start justify-center mt-4 bg-gray-100 flex-grow">
       <div className="flex flex-col md:flex-row items-center justify-center py-8 px-6 bg-gray-100 w-full max-w-full">
         {/* Image Section */}
         <div className="flex-shrink-0 mb-4 md:mb-0 ">
@@ -16,7 +16,7 @@ const IntroSection: React.FC = () => {
         </div>
 
         {/* Text Section */}
-        <div className="flex-grow text-center md:text-left md:mr-8"> {/* Added margin-right here */}
+        <div className="flex-grow text-center md:text-left md:mr-8">
           <h1 className="text-3xl md:text-6xl font-bold text-tertiary mb-6 md:mb-4 tracking-wide">
             We are Paws and Promises
           </h1>

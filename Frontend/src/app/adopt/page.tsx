@@ -1,137 +1,133 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link"; // Import Link from Next.js
-import PetCard from "@/components/adopt/PetCard"; // Import the PetCard component
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined"; // Close icon for filters
-import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined"; // Custom dropdown arrow icon
-import SearchIcon from "@mui/icons-material/Search"; // Search icon
-import { Select, MenuItem, InputBase, Button, IconButton } from "@mui/material"; // Material-UI components for dropdown
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import PetCard from "@/components/adopt/PetCard";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
+import SearchIcon from "@mui/icons-material/Search";
+import { Select, MenuItem, InputBase, Button, IconButton } from "@mui/material";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const AdoptPage = () => {
-  const [sortOption, setSortOption] = useState("ALPHABETICAL"); // State for sorting
-  const [page, setPage] = useState(1); // State for current page
+  const [sortOption, setSortOption] = useState("ALPHABETICAL");
+  const [page, setPage] = useState(1);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState([
+    { label: "Breed:", value: "Labrador" },
+    { label: "Age:", value: "Adult" },
+  ]);
 
-  // Sample data for pets
   const pets = [
-    {
-      id: 1,
-      name: "Rexar",
-      type: "Puppy",
-      breed: "Doberman",
-      imageSrc: "/image/default-image.png",
-    },
-    {
-      id: 2,
-      name: "Bella",
-      type: "Adult",
-      breed: "Labrador",
-      imageSrc: "/image/default-image.png",
-    },
-
-    {
-      id: 4,
-      name: "Luna",
-      type: "Puppy",
-      breed: "Bulldog",
-      imageSrc: "/image/default-image.png",
-    },
-    {
-      id: 5,
-      name: "Charlie",
-      type: "Adult",
-      breed: "Beagle",
-      imageSrc: "/image/default-image.png",
-    },
-    {
-      id: 6,
-      name: "Lucy",
-      type: "Senior",
-      breed: "Poodle",
-      imageSrc: "/image/default-image.png",
-    },
-    // Add more pet objects as needed
+    { id: 1, name: "Rexar", type: "Puppy", breed: "Doberman", imageSrc: "/image/default-image.png" },
+    { id: 2, name: "Bella", type: "Adult", breed: "Labrador", imageSrc: "/image/default-image.png" },
+    { id: 4, name: "Luna", type: "Puppy", breed: "Bulldog", imageSrc: "/image/default-image.png" },
+    { id: 5, name: "Charlie", type: "Adult", breed: "Beagle", imageSrc: "/image/default-image.png" },
+    { id: 6, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
   ];
 
+  const handleClearFilter = (filter: { label: string; value: string }) => {
+    setActiveFilters(activeFilters.filter((f) => f !== filter));
+  };
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, 
+      easing: "ease-in-out", 
+      once: false, 
+    });
+  
+    const handleRouteChange = () => {
+      AOS.refresh();
+    };
+  
+    window.addEventListener("scroll", handleRouteChange);
+    window.addEventListener("load", handleRouteChange);
+  
+    return () => {
+      window.removeEventListener("scroll", handleRouteChange);
+      window.removeEventListener("load", handleRouteChange);
+      AOS.refresh();
+    };
+  }, []); 
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col mt-2 min-h-screen">
       {/* Main Content */}
-      <div className="flex flex-1">
+      <div className="flex flex-col sm:flex-row">
         {/* Left Sidebar - Filters */}
-        <aside className="w-1/4 bg-lightgray px-4 py-14 border-r drop-shadow-2xl border-gray-300">
+        <aside
+          className={`${isSidebarOpen ? "block" : "hidden"} sm:block w-full sm:w-1/6 bg-lightgray px-4 py-12 border-b sm:border-r drop-shadow-2xl border-gray-300`}
+          data-aos="fade-left"
+        >
           {/* Filter Section */}
           {["Animal", "Breed", "Age", "Size", "Gender", "Shelter"].map((filter) => (
-            <div className="mb-4" key={filter}>
+            <div className="mb-4" key={filter} data-aos="fade-up">
               <h3 className="text-sm text-darkgray text-opacity-60 font-semibold">{filter}</h3>
               <div className="relative">
-                <select className="w-full font-semibold border rounded-xl p-3 mt-1 text-tertiary text-sm appearance-none">
+                <select className="w-full font-semibold border rounded-xl p-3 mt-1 text-tertiary text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-tertiary">
                   <option>{filter === "Animal" ? "Dog" : "Option 1"}</option>
                   <option>Option 2</option>
                 </select>
-                <ExpandMoreOutlinedIcon
-                  className="absolute right-3 top-3 text-tertiary"
-                  fontSize="small"
-                />
+                <ExpandMoreOutlinedIcon className="absolute right-3 top-3 text-tertiary" fontSize="small" />
               </div>
             </div>
           ))}
         </aside>
 
         {/* Right Sidebar - Applied Filters and Results */}
-        <main className="w-3/4 p-6 bg-lightgray">
+        <main className="w-full sm:w-5/6 p-6 sm:p-6 bg-lightgray flex flex-col items-center">
+          <button
+            className="sm:hidden bg-tertiary text-white px-4 py-2 rounded-lg mb-2"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            aria-label="Toggle Filters"
+          >
+            {isSidebarOpen ? "Hide Filter Options" : "Show Filter Options"}
+          </button>
+
           {/* Filters Applied Section */}
-          <div className="mb-6">
-            <div className="flex items-center justify-between">
+          <div className="mt-2 w-full text-center" data-aos="fade-up">
+            <div className="flex justify-center items-center mb-4">
               <h2 className="text-base font-normal">Filters Applied</h2>
             </div>
-            <div className="flex items-end mt-2 space-x-2">
-              <div className="flex items-center bg-tertiary text-white px-3 py-1 rounded-xl">
-                <span className="text-sm font-medium mr-2">Breed</span>
-                <IconButton
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid #3BA07F",
-                    color: "#3BA07F",
-                    fontSize: "0.75rem",
-                    width: "24px",
-                    height: "24px",
-                    padding: "2px",
-                  }}
-                  aria-label="Remove Breed filter"
+            <div className="flex justify-center items-center mt-2 space-x-2 flex-wrap">
+              {activeFilters.map((filter) => (
+                <div
+                  key={filter.label}
+                  className="flex items-center bg-tertiary text-white px-3 py-1 rounded-xl"
+                  data-aos="fade-in"
                 >
-                  <CancelOutlinedIcon fontSize="medium" />
-                </IconButton>
-              </div>
-              <div className="flex items-center bg-tertiary text-white px-3 py-1 rounded-xl">
-                <span className="text-sm font-medium mr-2">Age</span>
-                <IconButton
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid #3BA07F",
-                    color: "#3BA07F",
-                    fontSize: "0.75rem",
-                    width: "24px",
-                    height: "24px",
-                    padding: "2px",
-                  }}
-                  aria-label="Remove Age filter"
-                >
-                  <CancelOutlinedIcon fontSize="medium" />
-                </IconButton>
-              </div>
-              <button
-                className="text-sm text-tertiary font-medium underline ml-auto"
-                aria-label="Clear All Filters"
-              >
+                  <span className="text-sm font-medium mr-2">{filter.label}</span>
+                  <span className="text-sm font-medium mr-2">{filter.value}</span>
+                  <IconButton
+                    style={{
+                      backgroundColor: "#FFFFFF",
+                      border: "1px solid #3BA07F",
+                      color: "#3BA07F",
+                      fontSize: "0.75rem",
+                      width: "24px",
+                      height: "24px",
+                      padding: "2px",
+                    }}
+                    aria-label={`Remove ${filter.label} filter`}
+                    onClick={() => handleClearFilter(filter)}
+                  >
+                    <CancelOutlinedIcon fontSize="medium" />
+                  </IconButton>
+                </div>
+              ))}
+
+              <button className="text-sm text-tertiary font-medium underline ml-auto sm:ml-0 sm:text-center w-full sm:w-auto mt-4 sm:mt-0 sm:mb-0" aria-label="Clear All Filters">
                 Clear All Filters
               </button>
             </div>
           </div>
 
           {/* Sort and Search Section */}
-          <div className="flex items-end justify-between mb-6 gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4 w-full" data-aos="fade-up">
             {/* Sort by Dropdown */}
-            <div className="relative flex items-center border rounded-xl px-4 py-2 w-2/6 bg-white bg-opacity-50">
+            <div className="relative flex items-center border rounded-xl px-4 py-2 sm:w-2/6 bg-white bg-opacity-50">
               <div className="flex flex-col w-full">
                 <span className="text-gray-600 text-sm">Sort by</span>
                 <Select
@@ -149,7 +145,7 @@ const AdoptPage = () => {
             </div>
 
             {/* Search Bar */}
-            <div className="relative flex items-center border rounded-xl px-4 py-[19px] w-1/2 bg-white bg-opacity-50">
+            <div className="relative flex items-center border rounded-xl px-4 py-3 sm:w-1/2 bg-white bg-opacity-50">
               <InputBase
                 placeholder="Search..."
                 className="flex-grow outline-none text-gray-600"
@@ -162,7 +158,7 @@ const AdoptPage = () => {
           </div>
 
           {/* Pet Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full justify-center" data-aos="fade-up">
             {pets.map((pet) => (
               <Link href={`/petinfo`} key={pet.id}>
                 <PetCard
@@ -177,8 +173,7 @@ const AdoptPage = () => {
           </div>
 
           {/* Pagination Section */}
-          <div className="flex justify-end items-center mt-6 gap-4">
-            {/* Page Dropdown */}
+          <div className="flex justify-center items-center mt-6 gap-4 w-full">
             <div className="relative font-semibold flex items-center border rounded-xl px-3 py-1 w-40 text-tertiary bg-white bg-opacity-50">
               <Select
                 value={page}
@@ -196,7 +191,6 @@ const AdoptPage = () => {
               </Select>
             </div>
 
-            {/* Back Button */}
             <Button
               variant="contained"
               style={{
@@ -206,13 +200,12 @@ const AdoptPage = () => {
                 fontWeight: "bold",
                 borderRadius: "0.75rem",
               }}
-              disabled={true} // Disabled for now
+              disabled={true}
               aria-label="Go to previous page"
             >
               ← Back
             </Button>
 
-            {/* Next Button */}
             <Button
               variant="contained"
               style={{
@@ -222,7 +215,7 @@ const AdoptPage = () => {
                 fontWeight: "bold",
                 borderRadius: "0.75rem",
               }}
-              disabled={true} // Disabled for now
+              disabled={true}
               aria-label="Go to next page"
             >
               Next →
