@@ -24,7 +24,21 @@ const AdoptPage = () => {
     { id: 2, name: "Bella", type: "Adult", breed: "Labrador", imageSrc: "/image/default-image.png" },
     { id: 4, name: "Luna", type: "Puppy", breed: "Bulldog", imageSrc: "/image/default-image.png" },
     { id: 5, name: "Charlie", type: "Adult", breed: "Beagle", imageSrc: "/image/default-image.png" },
-    { id: 6, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 7, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 8, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 9, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 10, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 12, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 13, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 14, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 15, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 16, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 17, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 18, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 19, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 20, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 21, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
+    { id: 22, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
   ];
 
   const handleClearFilter = (filter: { label: string; value: string }) => {
@@ -158,7 +172,7 @@ const AdoptPage = () => {
           </div>
 
           {/* Pet Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full justify-center" data-aos="fade-up">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full justify-center" data-aos="fade-up">
             {pets.map((pet) => (
               <Link href={`/petinfo`} key={pet.id}>
                 <PetCard
