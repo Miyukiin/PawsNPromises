@@ -43,7 +43,7 @@ class Shelter(models.Model):
     name = models.CharField(_("Shelter Name"), max_length=50)
     location = models.OneToOneField(Geolocation, related_name='shelter', on_delete=models.CASCADE)
     contact_number = models.CharField(_("Contact Number"), max_length=50)
-    email = models.EmailField(_("Email"))
+    email = models.EmailField(_("Email"), unique=True)
     link = models.URLField(_("Website Link"), max_length=200, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -66,3 +66,11 @@ class Pet(models.Model):
 
     def __str__(self):
         return self.name
+
+class Volunteer(models.Model):
+    first_name = models.CharField(_("FName"), max_length=50, null=False, blank=False)
+    last_name = models.CharField(_("LName"), max_length=50, null=False, blank=False)
+    age = models.CharField(_("age"), max_length=50, null=False, blank=False)
+    email = models.EmailField(_("Email"), unique=True)
+    contact_number = models.CharField(_("Contact Number"), max_length=50)
+    address = models.CharField(_("Address"), max_length=50, null=False, blank=False)
