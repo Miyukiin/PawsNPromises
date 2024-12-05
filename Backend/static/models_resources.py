@@ -1,0 +1,71 @@
+breeds = [
+    ("AF", "Afghan Hound"),
+    ("AP", "Airedale Terrier"),
+    ("AM", "American Bulldog"),
+    ("AB", "American Cocker Spaniel"),
+    ("AS", "Australian Shepherd"),
+    ("AU", "Australian Terrier"),
+    ("BE", "Beagle"),
+    ("BS", "Basset Hound"),
+    ("BL", "Bernese Mountain Dog"),
+    ("BO", "Border Collie"),
+    ("BU", "Boxer"),
+    ("BR", "Brittany Spaniel"),
+    ("CA", "Cairn Terrier"),
+    ("CH", "Chihuahua"),
+    ("CI", "Chinese Shar-Pei"),
+    ("CO", "Collie"),
+    ("CO", "Cocker Spaniel"),
+    ("CA", "Cocker Spaniel"),
+    ("DA", "Dachshund"),
+    ("DO", "Doberman Pinscher"),
+    ("EL", "English Bulldog"),
+    ("ES", "English Setter"),
+    ("EP", "English Springer Spaniel"),
+    ("FR", "French Bulldog"),
+    ("GE", "German Shepherd"),
+    ("GR", "Golden Retriever"),
+    ("GW", "Great Dane"),
+    ("GI", "Great Pyrenees"),
+    ("HUS", "Husky"),
+    ("IR", "Irish Terrier"),
+    ("JACK", "Jack Russell Terrier"),
+    ("KERRY", "Kerry Blue Terrier"),
+    ("LAB", "Labrador Retriever"),
+    ("MAL", "Maltese"),
+    ("MAL", "Miniature Schnauzer"),
+    ("NA", "Newfoundland"),
+    ("PE", "Pembroke Welsh Corgi"),
+    ("PO", "Poodle"),
+    ("POM", "Pomeranian"),
+    ("POM", "Pug"),
+    ("RAT", "Rat Terrier"),
+    ("RO", "Rottweiler"),
+    ("SH", "Shiba Inu"),
+    ("SHI", "Shih Tzu"),
+    ("SI", "Silky Terrier"),
+    ("SNO", "Schnauzer"),
+    ("SP", "Spanish Water Dog"),
+    ("TERR", "Terrier"),
+    ("TERR", "West Highland Terrier"),
+    ("YORK", "Yorkshire Terrier"),
+]
+
+genders = [
+    ("M", "Male"),
+    ("F", "Female")
+]
+
+ages = [
+    ("Puppy", "Puppy"),
+    ("Young", "Young"),
+    ("Adult", "Adult"),
+    ("Senior", "Senior"),
+]
+
+sizes = [
+    ("S", "Small"),
+    ("M", "Medium"),
+    ("L", "Large"),
+    ("XL", "Extra Large")
+]
