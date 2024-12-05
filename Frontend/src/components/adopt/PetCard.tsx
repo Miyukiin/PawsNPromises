@@ -13,8 +13,7 @@ interface PetCardProps {
 const PetCard: React.FC<PetCardProps> = ({ id, name, type, breed, imageSrc }) => {
   return (
     <div
-      className="border rounded-3xl shadow-lg overflow-hidden bg-white cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
-      style={{ width: "95%" }}
+      className="border rounded-3xl shadow-lg overflow-hidden bg-white cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl w-full sm:w-[95%]"
     >
       <div className="relative">
         <img

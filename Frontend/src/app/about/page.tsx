@@ -9,12 +9,7 @@ import VolunteerFormSection from "@/components/VolunteerFormSection";
 
 const AboutPage: React.FC = () => {
   useEffect(() => {
-    AOS.init({
-      duration: 500,  
-      once: false,    
-      easing: "ease-in-out", 
-      offset: 200,     
-      delay: 100,      
+    AOS.init({ duration: 1000, once: false, easing: "ease-in",     
     });
 
     return () => {
@@ -25,19 +20,15 @@ const AboutPage: React.FC = () => {
   return (
     <div className="flex flex-col w-full h-full">
       <div 
-        className="flex-1 bg-white flex items-center justify-center" 
-        data-aos="fade-up"
-      >
+        className="flex-1 bg-white flex items-center justify-center">
         <IntroSection />
       </div>
 
       <div 
-        className="flex-1 bg-[#1E1E1E] flex items-center justify-center" 
-        data-aos="fade-down" 
-      >
+        className="flex-1 bg-[#1E1E1E] flex items-center justify-center" >
         <div className="flex flex-col items-center justify-center w-full max-w-4xl">
           <AdoptImageSection />          
-          <div data-aos="fade-up">
+          <div className="flex-1 bg-[#1E1E1E] flex items-center justify-center px-4 sm:px-6 lg:px-8">
             <VolunteerFormSection />
           </div>
         </div>

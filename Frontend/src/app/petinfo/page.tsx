@@ -1,6 +1,9 @@
+
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import PetCard from "@/components/adopt/PetCard";
 import { IconButton, Button } from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
@@ -8,6 +11,8 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const PetInfoPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +25,20 @@ const PetInfoPage = () => {
     setIsModalOpen(false);
   };
 
+  const otherPets = [
+    { id: 1, name: "Rexar", type: "Puppy", breed: "Doberman", imageSrc: "/image/default-image.png" },
+    { id: 2, name: "Bella", type: "Adult", breed: "Labrador", imageSrc: "/image/default-image.png" },
+    { id: 3, name: "Luna", type: "Puppy", breed: "Bulldog", imageSrc: "/image/default-image.png" },
+  ];
+
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: false, easing: "ease-in", });
+
+    return () => {
+      AOS.refresh();
+    };
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen items-center bg-lightgray font-sans">
       {/* Pet Image and Name Banner */}
@@ -29,6 +48,7 @@ const PetInfoPage = () => {
             src="/image/petinfo-mainimage.png"
             alt="Rexar"
             className="object-cover w-full h-full"
+            data-aos="fade-up"
           />
         </div>
       </div>
@@ -36,13 +56,15 @@ const PetInfoPage = () => {
       {/* Main Content */}
       <div className="container p-6 justify-center">
         <div className="bg-[#2DC593] mb-8 text-white py-8 rounded-xl flex items-center justify-between px-8">
-          <h1 className="text-4xl text-center font-normal flex-1">
-            🐾 Meet <span className="text-white font-bold">Rexar! 🐾</span>
+          <h1 className="text-4xl text-center font-normal flex-1" data-aos="zoom-in">
+            <img src="/image/paw.png" alt="Paw" className="inline-block w-12 h-12" /> Meet{" "}
+            <span className="text-white font-bold">Rexar!</span>{" "}
+            <img src="/image/paw.png" alt="Paw" className="inline-block w-12 h-12" />
           </h1>
         </div>
 
         {/* Pet Details Section */}
-        <div className="bg-white p-6 rounded-xl shadow-lg mb-8">
+        <div className="bg-white p-6 rounded-xl shadow-lg mb-8" data-aos="fade-up">
           <h2 className="text-3xl font-semibold mb-3 text-darkgray text-opacity-80">
             REXAR
           </h2>
@@ -71,7 +93,7 @@ const PetInfoPage = () => {
           </h2>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-darkgray">
-              OUR FRIEND
+              OUR PAW FRIEND
             </h3>
             <p className="text-gray-600 mb-4">
               Rexar is a loyal and friendly Doberman looking for a loving home.
@@ -87,7 +109,7 @@ const PetInfoPage = () => {
             </p>
 
             {/* Adoption Reminder */}
-            <div className="flex items-center justify-start bg-[#FFEECC] text-gray-700 text-sm p-4 rounded-md mb-4">
+            <div className="flex items-center justify-start bg-[#FFEECC] text-gray-700 text-sm p-4 rounded-md mb-4" data-aos="fade-left">
               <ErrorOutlineOutlinedIcon
                 fontSize="small"
                 className="text-[#3BA07F] mr-2 h-8 w-8"
@@ -103,17 +125,19 @@ const PetInfoPage = () => {
                 variant="contained"
                 style={{
                   backgroundColor: "#F4CE14",
-                  color: "#FFF",
+                  color: "#1E1E1E",
                   fontWeight: "bold",
                   padding: "16px 32px",
                   fontSize: "26px",
-                  width: "80%",
-                  maxWidth: "1221px",
+                  width: "100%",
                 }}
-                className="rounded-lg"
+                className="rounded-lg flex justify-center items-center space-x-4"
                 onClick={handleAdoptClick}
+                data-aos="fade-up"
               >
-                ADOPT REXAR 🐾
+                <img src="/image/paw2.png" alt="Paw2" className="inline-block w-8 h-8" />
+                <span>ADOPT REXAR</span>
+                <img src="/image/paw2.png" alt="Paw2" className="inline-block w-8 h-8" />
               </Button>
             </div>
           </div>
@@ -122,7 +146,7 @@ const PetInfoPage = () => {
         {/* Shelter Info and Map Section */}
         <div className="flex flex-col md:flex-row bg-white pl-2 rounded-xl shadow-lg mb-8">
           {/* Shelter Info */}
-          <div className="flex flex-col justify-between flex-1 md:w-1/2 px-6 py-6 pb-12">
+          <div className="flex flex-col justify-between flex-1 md:w-1/2 px-6 py-6 pb-12" data-aos="fade-right">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-4xl font-normal text-darkgray">
                 Gora Manila Shelter
@@ -172,7 +196,7 @@ const PetInfoPage = () => {
               </div>
             </div>
           </div>
-          <div className="flex-1 md:w-1/2">
+          <div className="flex-1 md:w-1/2" data-aos="fade-left">
             <img
               src="/image/map-image.png"
               alt="Map showing Gora Manila Shelter"
@@ -181,62 +205,44 @@ const PetInfoPage = () => {
           </div>
         </div>
 
-        {/* Other Friends */}
-        <div className="container p-6 justify-center">
-          <h2 className="text-3xl font-bold text-center mb-6 text-[#3BA07F]">
-            Check out our other Friends!
+        {/* Other Pets Section */}
+        <div className="text-center mt-8 mb-2">
+          <h2 className="text-3xl font-bold text-center mb-6 text-[#3BA07F]" data-aos="zoom-in">
+            Check out our other Paw Friends!
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[1, 2, 3].map((_, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-center bg-white rounded-xl h-72 shadow-lg overflow-hidden"
-              >
-                <img
-                  src="/image/default-image.png"
-                  alt="Rexar"
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-4">
-                  <p className="text-lg font-semibold text-gray-800 text-center">
-                    Rexar
-                  </p>
-                </div>
-              </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
+            {otherPets.map((pet, index) => (
+              <React.Fragment key={pet.id}>
+                <Link href={`/petinfo`} passHref> {/* Temporarily link to petinfo page */}
+                  <div data-aos="flip-left">
+                    <PetCard
+                      name={pet.name}
+                      breed={pet.breed}
+                      imageSrc={pet.imageSrc}
+                      id={0}
+                      type={pet.type}
+                    />
+                  </div>
+                </Link>
+
+                {/* Add button next to the third pet card */}
+                {index === 2 && (
+                  <Link href={`/adopt`} passHref>
+                    <div
+                      className="border rounded-3xl shadow-lg overflow-hidden bg-[#3BA07F] cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl flex items-center justify-center p-6 col-span-1 md:col-span-1 lg:col-span-1 w-full sm:w-[95%] h-72"
+                    >
+                      <button className="text-lg font-bold text-white flex flex-col items-center w-full h-full justify-center">
+                        <img src="/image/paw.png" alt="Paw Icon" className="w-16 h-16" />
+                        <span className="mt-2">Meet More Paw Friends!</span>
+                      </button>
+                    </div>
+                  </Link>
+                )}
+              </React.Fragment>
             ))}
-            <div className="flex items-center justify-center bg-[#2DC593] text-white rounded-lg shadow-lg p-6">
-              <button className="text-lg font-bold text-white flex flex-col items-center">
-                <span className="text-4xl">🐾</span>
-                <span className="mt-2">Meet More Friends!</span>
-              </button>
-            </div>
           </div>
         </div>
       </div>
-
-      {/* Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg py-6 pl-6 pr-24 shadow-lg ">
-            <h2 className="text-3xl font-normal mb-4 text-darkgray">
-              Thank you for your submission!
-            </h2>
-            <p className="text-darkgray mb-6">
-              Look forward to receiving an email from us!
-            </p>
-            <Button
-              variant="contained"
-              style={{
-                backgroundColor: "#3BA07F",
-                color: "#FFF",
-              }}
-              onClick={handleCloseModal}
-            >
-              Close
-            </Button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
