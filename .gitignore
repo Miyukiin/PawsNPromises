@@ -7,12 +7,12 @@ Frontend/out/
 Frontend/build
 
 # Backend-specific ignores
-backend-Django/venv/
-backend-Django/__pycache__/
-backend-Django/*.pyc
-backend-Django/db.sqlite3
-backend-Django/static/
-backend-Django/media/
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/db.sqlite3
+backend/static/
+backend/media/pet_images/
 
 # Ignore Python bytecode files
 __pycache__/
