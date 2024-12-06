@@ -22,6 +22,9 @@ const AdoptPage = () => {
   const pets = [
     { id: 1, name: "Rexar", type: "Puppy", breed: "Doberman", imageSrc: "/image/default-image.png" },
     { id: 2, name: "Bella", type: "Adult", breed: "Labrador", imageSrc: "/image/default-image.png" },
+    { id: 3, name: "Luna", type: "Puppy", breed: "Bulldog", imageSrc: "/image/default-image.png" },
+    { id: 4, name: "Charlie", type: "Adult", breed: "Beagle", imageSrc: "/image/default-image.png" },
+    { id: 5, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
     { id: 4, name: "Luna", type: "Puppy", breed: "Bulldog", imageSrc: "/image/default-image.png" },
     { id: 5, name: "Charlie", type: "Adult", breed: "Beagle", imageSrc: "/image/default-image.png" },
     { id: 7, name: "Lucy", type: "Senior", breed: "Poodle", imageSrc: "/image/default-image.png" },
@@ -46,25 +49,12 @@ const AdoptPage = () => {
   };
 
   useEffect(() => {
-    AOS.init({
-      duration: 1000, 
-      easing: "ease-in-out", 
-      once: false, 
-    });
-  
-    const handleRouteChange = () => {
-      AOS.refresh();
-    };
-  
-    window.addEventListener("scroll", handleRouteChange);
-    window.addEventListener("load", handleRouteChange);
-  
+    AOS.init({ duration: 1000, once: false, easing: "ease-in", });
+
     return () => {
-      window.removeEventListener("scroll", handleRouteChange);
-      window.removeEventListener("load", handleRouteChange);
       AOS.refresh();
     };
-  }, []); 
+  }, []);
 
   return (
     <div className="flex flex-col mt-2 min-h-screen">
@@ -93,7 +83,7 @@ const AdoptPage = () => {
         {/* Right Sidebar - Applied Filters and Results */}
         <main className="w-full sm:w-5/6 p-6 sm:p-6 bg-lightgray flex flex-col items-center">
           <button
-            className="sm:hidden bg-tertiary text-white px-4 py-2 rounded-lg mb-2"
+            className="sm:hidden bg-tertiary text-white px-4 py-2 rounded-lg mb-2 block mx-auto"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             aria-label="Toggle Filters"
           >
@@ -101,8 +91,8 @@ const AdoptPage = () => {
           </button>
 
           {/* Filters Applied Section */}
-          <div className="mt-2 w-full text-center" data-aos="fade-up">
-            <div className="flex justify-center items-center mb-4">
+          <div className="mt-2 mb-2 w-full text-center" data-aos="fade-up">
+            <div className="flex justify-center items-center mt-2 mb-2">
               <h2 className="text-base font-normal">Filters Applied</h2>
             </div>
             <div className="flex justify-center items-center mt-2 space-x-2 flex-wrap">
@@ -140,7 +130,6 @@ const AdoptPage = () => {
 
           {/* Sort and Search Section */}
           <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4 w-full" data-aos="fade-up">
-            {/* Sort by Dropdown */}
             <div className="relative flex items-center border rounded-xl px-4 py-2 sm:w-2/6 bg-white bg-opacity-50">
               <div className="flex flex-col w-full">
                 <span className="text-gray-600 text-sm">Sort by</span>
@@ -161,7 +150,7 @@ const AdoptPage = () => {
             {/* Search Bar */}
             <div className="relative flex items-center border rounded-xl px-4 py-3 sm:w-1/2 bg-white bg-opacity-50">
               <InputBase
-                placeholder="Search..."
+                placeholder="Search for paw friends..."
                 className="flex-grow outline-none text-gray-600"
                 inputProps={{ "aria-label": "search" }}
               />
@@ -171,20 +160,22 @@ const AdoptPage = () => {
             </div>
           </div>
 
-          {/* Pet Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full justify-center" data-aos="fade-up">
-            {pets.map((pet) => (
-              <Link href={`/petinfo`} key={pet.id}>
-                <PetCard
-                  id={pet.id}
-                  name={pet.name}
-                  type={pet.type}
-                  breed={pet.breed}
-                  imageSrc={pet.imageSrc}
-                />
-              </Link>
-            ))}
-          </div>
+            {/* Pet Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full justify-center">
+              {pets.map((pet) => (
+                <Link href={`/petinfo`} key={pet.id}>
+                  <div data-aos="flip-left">
+                    <PetCard
+                      id={pet.id}
+                      name={pet.name}
+                      type={pet.type}
+                      breed={pet.breed}
+                      imageSrc={pet.imageSrc}
+                    />
+                  </div>
+                </Link>
+              ))}
+            </div>
 
           {/* Pagination Section */}
           <div className="flex justify-center items-center mt-6 gap-4 w-full">

@@ -1,0 +1,124 @@
+
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import PetCard from "@/components/adopt/PetCard";
+import SearchIcon from "@mui/icons-material/Search";
+import { InputBase } from "@mui/material";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+const PawSection = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleAdoptClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const otherPets = [
+    { id: 1, name: "Rexar", type: "Puppy", breed: "Doberman", imageSrc: "/image/default-image.png" },
+    { id: 2, name: "Bella", type: "Adult", breed: "Labrador", imageSrc: "/image/default-image.png" },
+    { id: 3, name: "Luna", type: "Puppy", breed: "Bulldog", imageSrc: "/image/default-image.png" },
+  ];
+
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true }); 
+  }, []);
+
+  return (
+    <div className="flex flex-col items-center justify-center bg-gray-100 flex-grow px-4 sm:px-6 lg:px-8">
+      {/* Welcome Section */}
+      <div className="text-center mt-24 mt-[-380px]">
+        <h1
+          className="text-3xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-2 inline-flex items-center justify-center"
+          data-aos="fade-up"
+        >
+          Find your new paw friend
+          <img src="/image/paw.png" alt="Paw Icon" className="w-12 h-12 ml-2" />
+        </h1>
+
+        <h2
+          className="text-xl sm:text-lg md:text-2xl lg:text-3xl font-medium text-white mt-2"
+          data-aos="fade-up"
+        >
+          Browse pets from our library of over 200+ paw friends!
+        </h2>
+
+        <div className="flex justify-center mt-8">
+          <div
+            className="relative flex items-center border rounded-xl px-4 py-3 sm:w-1/2 bg-white shadow-md"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            <InputBase
+              placeholder="Search for paw friends..."
+              className="flex-grow outline-none text-gray-600"
+              inputProps={{ "aria-label": "search" }}
+            />
+            <div className="flex items-center justify-center">
+              <SearchIcon className="text-tertiary" />
+            </div>
+          </div>
+        </div>
+
+        {/* Buttons Section */}
+        <div className="flex justify-center mt-8">
+          <button
+            className="bg-[#3BA07F] text-white font-medium py-4 px-8 text-xl rounded-lg mx-2 flex flex-col items-center justify-center hover:scale-110 transform transition-all duration-300"
+          >
+            <img src="image/dog.png" alt="Dog" className="mb-2 w-16 h-16 object-contain" />
+            Dogs
+          </button>
+          <button
+            className="bg-[#3BA07F] text-white font-medium py-4 px-8 text-lg rounded-lg mx-2 flex flex-col items-center justify-center hover:scale-110 transform transition-all duration-300"
+          >
+            <img src="image/cat.png" alt="Cat" className="mb-2 w-16 h-16 object-contain" />
+            Cats
+          </button>
+        </div>
+      </div>
+
+      {/* Paw Friends Section */}
+      <div className="text-center mt-4 mb-2">
+        <h2 className="text-3xl font-bold text-center mt-8 mb-8 text-[#3BA07F]" data-aos="zoom-in">
+          PAW FRIENDS FOR ADOPTION!
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
+          {otherPets.map((pet, index) => (
+            <React.Fragment key={pet.id}>
+              <Link href={`/petinfo`} passHref> {/* Temporarily link to petinfo page */}
+                <div data-aos="flip-left">
+                  <PetCard
+                    name={pet.name}
+                    breed={pet.breed}
+                    imageSrc={pet.imageSrc}
+                    id={0}
+                    type={pet.type}
+                  />
+                </div>
+              </Link>
+
+              {index === 2 && (
+                <Link href={`/adopt`} passHref>
+                  <div
+                    className="border rounded-3xl shadow-lg overflow-hidden bg-[#3BA07F] cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl flex items-center justify-center p-6 col-span-1 md:col-span-1 lg:col-span-1 w-full sm:w-[95%] h-72"
+                  >
+                    <button className="text-lg font-bold text-white flex flex-col items-center w-full h-full justify-center">
+                      <img src="/image/paw.png" alt="Paw Icon" className="w-16 h-16" />
+                      <span className="mt-2">Meet More Paw Friends!</span>
+                    </button>
+                  </div>
+                </Link>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PawSection;
