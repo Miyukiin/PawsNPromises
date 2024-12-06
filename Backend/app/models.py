@@ -3,10 +3,11 @@ from django.utils.translation import gettext as _
 from static.models_resources import breeds, genders, ages, sizes
 
 class Image(models.Model):
+    pet = models.ForeignKey("Pet", related_name='images', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='pet_images/')
 
     def __str__(self):
-        return f"Image of Pet {self.pk}"
+        return f"{self.pet} Image DB ID: {self.pk}"
 
 class Breed(models.Model):
     name = models.CharField(_("Breed Name"), max_length=50, choices=breeds)
@@ -53,12 +54,11 @@ class Shelter(models.Model):
 
 class Pet(models.Model):
     name = models.CharField(_("Name"), max_length=50)
-    images = models.ManyToManyField(Image, related_name='pets', blank=True)
-    breed = models.ForeignKey(Breed, related_name='pets', blank=True, null=True, on_delete=models.SET_NULL)
-    gender = models.ForeignKey(Gender, related_name='pets', blank=True, null=True, on_delete=models.SET_NULL)
-    age = models.ForeignKey(Age, related_name='pets', blank=True, null=True, on_delete=models.SET_NULL)
-    size = models.ForeignKey(Size, related_name='pets', blank=True, null=True, on_delete=models.SET_NULL)
-    shelter = models.ForeignKey(Shelter, related_name='pets', blank=True, null=True, on_delete=models.SET_NULL)
+    breed = models.ForeignKey(Breed, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
+    gender = models.ForeignKey(Gender, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
+    age = models.ForeignKey(Age, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
+    size = models.ForeignKey(Size, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
+    shelter = models.ForeignKey(Shelter, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
     description = models.CharField(_("Pet Description"), max_length=100)
     medical_description = models.CharField(_("Medical Description"), max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
