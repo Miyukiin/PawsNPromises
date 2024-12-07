@@ -21,6 +21,7 @@ interface Pet {
 
 const AdoptPage = () => {
   const [sortOption, setSortOption] = useState("ALPHABETICAL");
+  const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState([
@@ -29,8 +30,9 @@ const AdoptPage = () => {
   ]);
 
   const [pets, setPets] = useState<Pet[]>([]);
+  const [displayedPets, setDisplayedPets] = useState<Pet[]>([]); // For search filter
   const pageLimit = 5; // Number of pets to display per page
-  const pages = Math.ceil(pets.length / pageLimit);
+  const pages = Math.ceil(displayedPets.length / pageLimit);
 
   const handleClearFilter = (filter: { label: string; value: string }) => {
     setActiveFilters(activeFilters.filter((f) => f !== filter));
@@ -45,6 +47,7 @@ const AdoptPage = () => {
         a.name.localeCompare(b.name),
       );
       setPets(sortedPets);
+      setDisplayedPets(sortedPets);
     });
 
     return () => {
@@ -54,7 +57,7 @@ const AdoptPage = () => {
 
   // Sort pets
   useEffect(() => {
-    setPets((prevPets) => {
+    setDisplayedPets((prevPets) => {
       const sortedPets = prevPets.sort((a, b) => {
         // Define the age order
         const ageOrder = ["Puppy", "Young", "Adult", "Senior"];
@@ -66,7 +69,15 @@ const AdoptPage = () => {
       });
       return sortedPets;
     });
-  }, [sortOption]);
+  }, [sortOption, searchTerm]);
+
+  // Search pets
+  useEffect(() => {
+    const filteredPets = pets.filter((pet) =>
+      pet.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+    setDisplayedPets(filteredPets);
+  }, [searchTerm]);
 
   return (
     <div className="flex flex-col mt-2 min-h-screen">
@@ -179,6 +190,8 @@ const AdoptPage = () => {
             {/* Search Bar */}
             <div className="relative flex items-center border rounded-xl px-4 py-3 sm:w-1/2 bg-white bg-opacity-50">
               <InputBase
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search for paw friends..."
                 className="flex-grow outline-none text-gray-600"
                 inputProps={{ "aria-label": "search" }}
@@ -191,8 +204,8 @@ const AdoptPage = () => {
 
           {/* Pet Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full justify-center">
-            {pets &&
-              pets
+            {displayedPets &&
+              displayedPets
                 .slice(
                   // Paginate
                   (page - 1) * pageLimit,
