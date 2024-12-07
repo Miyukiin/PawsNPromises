@@ -29,6 +29,8 @@ const AdoptPage = () => {
   ]);
 
   const [pets, setPets] = useState<Pet[]>([]);
+  const pageLimit = 5; // Number of pets to display per page
+  const pages = Math.ceil(pets.length / pageLimit);
 
   const handleClearFilter = (filter: { label: string; value: string }) => {
     setActiveFilters(activeFilters.filter((f) => f !== filter));
@@ -190,19 +192,25 @@ const AdoptPage = () => {
           {/* Pet Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full justify-center">
             {pets &&
-              pets.map((pet) => (
-                <Link href={`/petinfo`} key={pet.id}>
-                  <div data-aos="flip-left">
-                    <PetCard
-                      id={pet.id}
-                      name={pet.name}
-                      age={pet.age}
-                      breed={pet.breed}
-                      imageSrc={pet.imageSrc}
-                    />
-                  </div>
-                </Link>
-              ))}
+              pets
+                .slice(
+                  // Paginate
+                  (page - 1) * pageLimit,
+                  (page - 1) * pageLimit + pageLimit,
+                )
+                .map((pet) => (
+                  <Link href={`/petinfo`} key={pet.id}>
+                    <div data-aos="flip-left">
+                      <PetCard
+                        id={pet.id}
+                        name={pet.name}
+                        age={pet.age}
+                        breed={pet.breed}
+                        imageSrc={pet.imageSrc}
+                      />
+                    </div>
+                  </Link>
+                ))}
           </div>
 
           {/* Pagination Section */}
@@ -216,9 +224,9 @@ const AdoptPage = () => {
                 className="font-medium text-tertiary w-full"
                 IconComponent={ExpandMoreOutlinedIcon}
               >
-                {Array.from({ length: 5 }, (_, i) => (
+                {Array.from({ length: pages }, (_, i) => (
                   <MenuItem key={i} value={i + 1}>
-                    Page {i + 1} of 5
+                    Page {i + 1} of {pages}
                   </MenuItem>
                 ))}
               </Select>
@@ -232,9 +240,15 @@ const AdoptPage = () => {
                 textTransform: "none",
                 fontWeight: "bold",
                 borderRadius: "0.75rem",
+                // Styling for disabled
+                pointerEvents: page === 1 ? "none" : "auto",
+                opacity: page === 1 ? 0.75 : 1,
               }}
-              disabled={true}
+              disabled={page === 1}
               aria-label="Go to previous page"
+              onClick={() => {
+                setPage((prev) => Math.max(prev - 1, 1));
+              }}
             >
               ← Back
             </Button>
@@ -247,9 +261,15 @@ const AdoptPage = () => {
                 textTransform: "none",
                 fontWeight: "bold",
                 borderRadius: "0.75rem",
+                // Styling for disabled
+                pointerEvents: page === pages ? "none" : "auto",
+                opacity: page === pages ? 0.75 : 1,
               }}
-              disabled={true}
+              disabled={page === pages}
               aria-label="Go to next page"
+              onClick={() => {
+                setPage((prev) => Math.min(prev + 1, pages));
+              }}
             >
               Next →
             </Button>
