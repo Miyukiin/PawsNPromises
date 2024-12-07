@@ -1,10 +1,21 @@
 import axios from "axios";
 
 // API Initialization
-const API_BASE_URL = "http://127.0.0.1:8000/api/";
+const API_BASE_URL = "http://localhost:8000/api/";
 const apiService = axios.create({ baseURL: API_BASE_URL });
 
 // GET Endpoints
+// should return
+// { id: 1, name: "Rexar", type: "Puppy", breed: "Doberman", imageSrc: "/image/default-image.png" },
+export async function getPets() {
+  try {
+    const response = await apiService.get("/pets/");
+    return response.data.pets;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function sampleGet() {
   try {
     const response = await apiService.get("/test/");
