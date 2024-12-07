@@ -39,7 +39,10 @@ const AdoptPage = () => {
 
     // API Fetching
     getPets().then((data) => {
-      setPets(data);
+      const sortedPets = data.sort((a: Pet, b: Pet) =>
+        a.name.localeCompare(b.name),
+      );
+      setPets(sortedPets);
     });
 
     return () => {
