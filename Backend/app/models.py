@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext as _
-from static.models_resources import breeds, genders, ages, sizes
+from static.models_resources import animals, breeds, genders, ages, sizes
 
 class Image(models.Model):
     pet = models.ForeignKey("Pet", related_name='images', on_delete=models.CASCADE)
@@ -14,6 +14,12 @@ class Breed(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+class Animal(models.Model):
+    name = models.CharField(_("Animal Name"), max_length=50, choices=animals)
+
+    def __str__(self):
+        return self.name
 
 class Gender(models.Model):
     name = models.CharField(_("Gender"), max_length=10, choices=genders)
@@ -54,6 +60,7 @@ class Shelter(models.Model):
 
 class Pet(models.Model):
     name = models.CharField(_("Name"), max_length=50)
+    animal = models.ForeignKey(Animal, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
     breed = models.ForeignKey(Breed, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
     gender = models.ForeignKey(Gender, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
     age = models.ForeignKey(Age, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
