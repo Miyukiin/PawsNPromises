@@ -19,5 +19,6 @@ from .views import *
 
 urlpatterns = [
     path('api/sample/', sample_api, name="sample_api"),
-    path('api/pets/', get_pets, name="get_pets")
+    path('api/pets/', get_pets, name="get_pets"),
+    path('api/static/', get_static, name="get_static"),
 ]

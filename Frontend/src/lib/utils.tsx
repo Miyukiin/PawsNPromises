@@ -16,6 +16,15 @@ export async function getPets() {
   }
 }
 
+export async function getStatic(payload: string) {
+  try {
+    const response = await apiService.get(`/static/?name=${payload}`);
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function sampleGet() {
   try {
     const response = await apiService.get("/test/");

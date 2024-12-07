@@ -9,7 +9,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Select, MenuItem, InputBase, Button, IconButton } from "@mui/material";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { getPets } from "src/lib/utils";
+import { getPets, getStatic } from "src/lib/utils";
 
 interface Pet {
   id: number;
@@ -19,6 +19,41 @@ interface Pet {
   breed: string;
   imageSrc: string;
 }
+
+interface FilterDropdownProps {
+  label: string;
+  options: string[];
+  filter: string;
+  setFilter: (filter: string) => void;
+}
+const FilterDropdown: React.FC<FilterDropdownProps> = ({
+  label,
+  options,
+  filter,
+  setFilter,
+}) => {
+  return (
+    <div className="mb-4" key={label} data-aos="fade-up">
+      <h3 className="text-sm text-darkgray text-opacity-60 font-semibold">
+        {label}
+      </h3>
+      <div className="relative">
+        <select className="w-full font-semibold border rounded-xl p-3 mt-1 text-tertiary text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-tertiary">
+          <option value="">All</option>
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+        <ExpandMoreOutlinedIcon
+          className="absolute right-3 top-3 text-tertiary"
+          fontSize="small"
+        />
+      </div>
+    </div>
+  );
+};
 
 const AdoptPage = () => {
   const [sortOption, setSortOption] = useState("ALPHABETICAL");
@@ -30,10 +65,26 @@ const AdoptPage = () => {
     { label: "Age:", value: "Adult" },
   ]);
 
+  // Page States
   const [pets, setPets] = useState<Pet[]>([]);
   const [displayedPets, setDisplayedPets] = useState<Pet[]>([]); // For search filter
   const pageLimit = 5; // Number of pets to display per page
   const pages = Math.ceil(displayedPets.length / pageLimit);
+
+  // Filter States
+  const [animalFilter, setAnimalFilter] = useState("all");
+  const [breedFilter, setBreedFilter] = useState("all");
+  const [ageFilter, setAgeFilter] = useState("all");
+  const [sizeFilter, setSizeFilter] = useState("all");
+  const [genderFilter, setGenderFilter] = useState("all");
+  const [shelterFilter, setShelterFilter] = useState("all");
+
+  const [animalFilterOptions, setAnimalFilterOptions] = useState([]);
+  const [breedFilterOptions, setBreedFilterOptions] = useState([]);
+  const [ageFilterOptions, setAgeFilterOptions] = useState([]);
+  const [sizeFilterOptions, setSizeFilterOptions] = useState([]);
+  const [genderFilterOptions, setGenderFilterOptions] = useState([]);
+  const [shelterFilterOptions, setShelterFilterOptions] = useState([]);
 
   const handleClearFilter = (filter: { label: string; value: string }) => {
     setActiveFilters(activeFilters.filter((f) => f !== filter));
@@ -42,7 +93,7 @@ const AdoptPage = () => {
   useEffect(() => {
     AOS.init({ duration: 1000, once: false, easing: "ease-in" });
 
-    // API Fetching
+    // Fetch pets
     getPets().then((data) => {
       const sortedPets = data.sort((a: Pet, b: Pet) =>
         a.name.localeCompare(b.name),
@@ -50,6 +101,14 @@ const AdoptPage = () => {
       setPets(sortedPets);
       setDisplayedPets(sortedPets);
     });
+
+    // Fetch filters
+    getStatic("animals").then((data) => setAnimalFilterOptions(data));
+    getStatic("breeds").then((data) => setBreedFilterOptions(data));
+    getStatic("ages").then((data) => setAgeFilterOptions(data));
+    getStatic("sizes").then((data) => setSizeFilterOptions(data));
+    getStatic("genders").then((data) => setGenderFilterOptions(data));
+    getStatic("shelters").then((data) => setShelterFilterOptions(data));
 
     return () => {
       AOS.refresh();
@@ -90,25 +149,42 @@ const AdoptPage = () => {
           data-aos="fade-left"
         >
           {/* Filter Section */}
-          {["Animal", "Breed", "Age", "Size", "Gender", "Shelter"].map(
-            (filter) => (
-              <div className="mb-4" key={filter} data-aos="fade-up">
-                <h3 className="text-sm text-darkgray text-opacity-60 font-semibold">
-                  {filter}
-                </h3>
-                <div className="relative">
-                  <select className="w-full font-semibold border rounded-xl p-3 mt-1 text-tertiary text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-tertiary">
-                    <option>{filter === "Animal" ? "Dog" : "Option 1"}</option>
-                    <option>Option 2</option>
-                  </select>
-                  <ExpandMoreOutlinedIcon
-                    className="absolute right-3 top-3 text-tertiary"
-                    fontSize="small"
-                  />
-                </div>
-              </div>
-            ),
-          )}
+          <FilterDropdown
+            label="Animal"
+            options={animalFilterOptions}
+            filter={animalFilter}
+            setFilter={setAnimalFilter}
+          />
+          <FilterDropdown
+            label="Breed"
+            options={breedFilterOptions}
+            filter={breedFilter}
+            setFilter={setBreedFilter}
+          />
+          <FilterDropdown
+            label="Age"
+            options={ageFilterOptions}
+            filter={ageFilter}
+            setFilter={setAgeFilter}
+          />
+          <FilterDropdown
+            label="Size"
+            options={sizeFilterOptions}
+            filter={sizeFilter}
+            setFilter={setSizeFilter}
+          />
+          <FilterDropdown
+            label="Gender"
+            options={genderFilterOptions}
+            filter={genderFilter}
+            setFilter={setGenderFilter}
+          />
+          <FilterDropdown
+            label="Shelter"
+            options={shelterFilterOptions}
+            filter={shelterFilter}
+            setFilter={setShelterFilter}
+          />
         </aside>
 
         {/* Right Sidebar - Applied Filters and Results */}
