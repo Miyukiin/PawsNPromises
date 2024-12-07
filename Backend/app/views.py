@@ -15,9 +15,10 @@ def get_pets(request:HttpRequest):
     for index, pet in enumerate(pets):
         response.append({
             'id': index,
+            'animal': pet.animal.name,
             'name': pet.name,
             'age': pet.age.name,
-            'breed': pet.breed.name,
+            'breed': pet.breed.get_name_display(),
             'imageSrc': "/image/default-image.png",
         })
     if request.method == "GET":

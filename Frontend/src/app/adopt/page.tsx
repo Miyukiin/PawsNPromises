@@ -13,6 +13,7 @@ import { getPets } from "src/lib/utils";
 
 interface Pet {
   id: number;
+  animal: string;
   name: string;
   age: string;
   breed: string;
