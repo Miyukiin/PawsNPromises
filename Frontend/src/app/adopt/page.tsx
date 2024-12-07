@@ -47,6 +47,22 @@ const AdoptPage = () => {
     };
   }, []);
 
+  // Sort pets
+  useEffect(() => {
+    setPets((prevPets) => {
+      const sortedPets = prevPets.sort((a, b) => {
+        // Define the age order
+        const ageOrder = ["Puppy", "Young", "Adult", "Senior"];
+
+        // Sort based on the selected option ngl idk why this needs to be !==
+        return sortOption !== "ALPHABETICAL"
+          ? a.name.localeCompare(b.name)
+          : ageOrder.indexOf(a.age) - ageOrder.indexOf(b.age);
+      });
+      return sortedPets;
+    });
+  }, [sortOption]);
+
   return (
     <div className="flex flex-col mt-2 min-h-screen">
       {/* Main Content */}
