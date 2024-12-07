@@ -1,3 +1,8 @@
+animals = [
+    ("Dog", "Dog"),
+    ("Cat", "Cat"),
+]
+
 breeds = [
     ("AF", "Afghan Hound"),
     ("AP", "Airedale Terrier"),
