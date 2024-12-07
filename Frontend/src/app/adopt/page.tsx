@@ -13,11 +13,19 @@ import { getPets, getStatic } from "src/lib/utils";
 
 interface Pet {
   id: number;
-  animal: string;
   name: string;
-  age: string;
+  animal: string;
   breed: string;
+  age: string;
+  size: string;
+  gender: string;
+  shelter: string;
   imageSrc: string;
+}
+
+interface Filter {
+  label: string;
+  value: string;
 }
 
 interface FilterDropdownProps {
@@ -26,6 +34,7 @@ interface FilterDropdownProps {
   filter: string;
   setFilter: (filter: string) => void;
 }
+
 const FilterDropdown: React.FC<FilterDropdownProps> = ({
   label,
   options,
@@ -38,8 +47,12 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
         {label}
       </h3>
       <div className="relative">
-        <select className="w-full font-semibold border rounded-xl p-3 mt-1 text-tertiary text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-tertiary">
-          <option value="">All</option>
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="w-full font-semibold border rounded-xl p-3 mt-1 text-tertiary text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-tertiary"
+        >
+          <option value="all">All</option>
           {options.map((option) => (
             <option key={option} value={option}>
               {option}
@@ -60,10 +73,7 @@ const AdoptPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeFilters, setActiveFilters] = useState([
-    { label: "Breed:", value: "Labrador" },
-    { label: "Age:", value: "Adult" },
-  ]);
+  const [activeFilters, setActiveFilters] = useState<Filter[]>([]);
 
   // Page States
   const [pets, setPets] = useState<Pet[]>([]);
@@ -86,10 +96,50 @@ const AdoptPage = () => {
   const [genderFilterOptions, setGenderFilterOptions] = useState([]);
   const [shelterFilterOptions, setShelterFilterOptions] = useState([]);
 
+  const filters = [
+    {
+      name: "Animal",
+      options: animalFilterOptions,
+      filter: animalFilter,
+      setFilter: setAnimalFilter,
+    },
+    {
+      name: "Breed",
+      options: breedFilterOptions,
+      filter: breedFilter,
+      setFilter: setBreedFilter,
+    },
+    {
+      name: "Age",
+      options: ageFilterOptions,
+      filter: ageFilter,
+      setFilter: setAgeFilter,
+    },
+    {
+      name: "Size",
+      options: sizeFilterOptions,
+      filter: sizeFilter,
+      setFilter: setSizeFilter,
+    },
+    {
+      name: "Gender",
+      options: genderFilterOptions,
+      filter: genderFilter,
+      setFilter: setGenderFilter,
+    },
+    {
+      name: "Shelter",
+      options: shelterFilterOptions,
+      filter: shelterFilter,
+      setFilter: setShelterFilter,
+    },
+  ];
+
   const handleClearFilter = (filter: { label: string; value: string }) => {
     setActiveFilters(activeFilters.filter((f) => f !== filter));
   };
 
+  // On mount
   useEffect(() => {
     AOS.init({ duration: 1000, once: false, easing: "ease-in" });
 
@@ -139,6 +189,36 @@ const AdoptPage = () => {
     setDisplayedPets(filteredPets);
   }, [searchTerm]);
 
+  // Filter pets
+  useEffect(
+    () => {
+      // Update filter tags
+      const activeFilters = filters.map((filter) => {
+        if (filter.filter !== "all") {
+          return {
+            label: filter.name,
+            value: filter.filter,
+          };
+        }
+      });
+      setActiveFilters(activeFilters.filter((f) => f !== undefined));
+
+      // Filter pets
+      const filteredPets = pets.filter((pet) => {
+        return (
+          (animalFilter === "all" || pet.animal === animalFilter) &&
+          (breedFilter === "all" || pet.breed === breedFilter) &&
+          (ageFilter === "all" || pet.age === ageFilter) &&
+          (sizeFilter === "all" || pet.size === sizeFilter) &&
+          (genderFilter === "all" || pet.gender === genderFilter) &&
+          (shelterFilter === "all" || pet.shelter === shelterFilter)
+        );
+      });
+      setDisplayedPets(filteredPets);
+    },
+    filters.map((filter) => filter.filter),
+  );
+
   return (
     <div className="flex flex-col mt-2 min-h-screen">
       {/* Main Content */}
@@ -149,42 +229,15 @@ const AdoptPage = () => {
           data-aos="fade-left"
         >
           {/* Filter Section */}
-          <FilterDropdown
-            label="Animal"
-            options={animalFilterOptions}
-            filter={animalFilter}
-            setFilter={setAnimalFilter}
-          />
-          <FilterDropdown
-            label="Breed"
-            options={breedFilterOptions}
-            filter={breedFilter}
-            setFilter={setBreedFilter}
-          />
-          <FilterDropdown
-            label="Age"
-            options={ageFilterOptions}
-            filter={ageFilter}
-            setFilter={setAgeFilter}
-          />
-          <FilterDropdown
-            label="Size"
-            options={sizeFilterOptions}
-            filter={sizeFilter}
-            setFilter={setSizeFilter}
-          />
-          <FilterDropdown
-            label="Gender"
-            options={genderFilterOptions}
-            filter={genderFilter}
-            setFilter={setGenderFilter}
-          />
-          <FilterDropdown
-            label="Shelter"
-            options={shelterFilterOptions}
-            filter={shelterFilter}
-            setFilter={setShelterFilter}
-          />
+          {filters.map((filter) => (
+            <FilterDropdown
+              key={filter.name}
+              label={filter.name}
+              options={filter.options}
+              filter={filter.filter}
+              setFilter={filter.setFilter}
+            />
+          ))}
         </aside>
 
         {/* Right Sidebar - Applied Filters and Results */}
@@ -236,6 +289,7 @@ const AdoptPage = () => {
               <button
                 className="text-sm text-tertiary font-medium underline ml-auto sm:ml-0 sm:text-center w-full sm:w-auto mt-4 sm:mt-0 sm:mb-0"
                 aria-label="Clear All Filters"
+                onClick={() => filters.map((filter) => filter.setFilter("all"))}
               >
                 Clear All Filters
               </button>
