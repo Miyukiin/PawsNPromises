@@ -16,8 +16,8 @@ def get_pets(request:HttpRequest):
         response.append({
             'id': index,
             'name': pet.name,
-            'animal': pet.animal.name,
-            'breed': pet.breed.get_name_display(),
+            'animal': pet.breed.animal_type.name,
+            'breed': pet.breed.name,
             'age': pet.age.name,
             'size': pet.size.get_name_display(),
             'gender': pet.gender.get_name_display(),
