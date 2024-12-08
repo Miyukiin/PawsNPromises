@@ -218,6 +218,13 @@ const AdoptPage = () => {
     setDisplayedPets(sortPets(petsToDisplay));
   }, [...filters.map((filter) => filter.filter), searchTerm]);
 
+  // Update page number when number of pages change
+  useEffect(() => {
+    if (page > pages) {
+      setPage(pages);
+    }
+  }, [pages]);
+
   return (
     <div className="flex flex-col mt-2 min-h-screen">
       {/* Main Content */}
