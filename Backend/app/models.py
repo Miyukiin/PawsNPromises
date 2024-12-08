@@ -11,12 +11,13 @@ class Image(models.Model):
 
 class Breed(models.Model):
     name = models.CharField(_("Breed Name"), max_length=50, choices=breeds)
+    animal_type = models.ForeignKey("Animal", related_name='animal_type', blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.name} | {self.animal_type}"
 
 class Animal(models.Model):
-    name = models.CharField(_("Animal Name"), max_length=50, choices=animals)
+    name = models.CharField(_("Animal Type"), max_length=10, choices=animals)
 
     def __str__(self):
         return self.name
@@ -60,7 +61,6 @@ class Shelter(models.Model):
 
 class Pet(models.Model):
     name = models.CharField(_("Name"), max_length=50)
-    animal = models.ForeignKey(Animal, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
     breed = models.ForeignKey(Breed, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
     gender = models.ForeignKey(Gender, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
     age = models.ForeignKey(Age, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
