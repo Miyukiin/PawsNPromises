@@ -183,7 +183,7 @@ const PetInfoPage = () => {
                   alt="Paw2"
                   className="inline-block w-8 h-8"
                 />
-                <span>ADOPT REXAR</span>
+                <span>ADOPT {pet?.name.toUpperCase()}</span>
                 <img
                   src="/image/paw2.png"
                   alt="Paw2"
