@@ -1,3 +1,4 @@
+
 class PetSerializer:
     def __init__(self, pet):
         self.id = pet.id
@@ -29,3 +30,21 @@ class PetSerializer:
             'medical_description': self.medical_description,
             'imageSrc': self.imageSrc,
         }
+
+class ShelterSerializer:
+    def __init__(self, shelter):
+        self.id = shelter.id
+        self.name = shelter.name
+        self.contact_number = shelter.contact_number
+        self.email = shelter.email
+        self.link = shelter.link
+
+    def dict_display(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'contact_number': self.contact_number,
+            'email': self.email,
+            'link': self.link
+        }
+

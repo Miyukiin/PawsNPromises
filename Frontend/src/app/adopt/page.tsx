@@ -19,7 +19,10 @@ interface Pet {
   age: string;
   size: string;
   gender: string;
-  shelter: string;
+  shelter_id: string;
+  shelter_name: string;
+  description: string;
+  medical_description: string;
   imageSrc: string;
 }
 
@@ -211,7 +214,7 @@ const AdoptPage = () => {
           (ageFilter === "all" || pet.age === ageFilter) &&
           (sizeFilter === "all" || pet.size === sizeFilter) &&
           (genderFilter === "all" || pet.gender === genderFilter) &&
-          (shelterFilter === "all" || pet.shelter === shelterFilter)
+          (shelterFilter === "all" || pet.shelter_name === shelterFilter)
         );
       });
       setDisplayedPets(filteredPets);
@@ -343,7 +346,7 @@ const AdoptPage = () => {
                   (page - 1) * pageLimit + pageLimit,
                 )
                 .map((pet) => (
-                  <Link href={`/petinfo`} key={pet.id}>
+                  <Link href={`/petinfo/${pet.id}`} key={pet.id}>
                     <div data-aos="flip-left">
                       <PetCard
                         id={pet.id}
