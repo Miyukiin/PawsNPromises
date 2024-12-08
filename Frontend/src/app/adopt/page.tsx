@@ -225,6 +225,11 @@ const AdoptPage = () => {
     }
   }, [pages]);
 
+  // Limit page to minimum of 1 (this fixes a bug when you go back to the adopt page from the pet info page)
+  useEffect(() => {
+    setPage(Math.max(page, 1));
+  }, [page]);
+
   return (
     <div className="flex flex-col mt-2 min-h-screen">
       {/* Main Content */}
