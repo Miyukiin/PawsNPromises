@@ -13,17 +13,7 @@ def get_pets(request:HttpRequest):
     pets = Pet.objects.all()
     response = []
     for index, pet in enumerate(pets):
-        response.append({
-            'id': index,
-            'name': pet.name,
-            'animal': pet.breed.animal_type.name,
-            'breed': pet.breed.name,
-            'age': pet.age.name,
-            'size': pet.size.get_name_display(),
-            'gender': pet.gender.get_name_display(),
-            'shelter': pet.shelter.name,
-            'imageSrc': "/image/default-image.png",
-        })
+        response.append(PetSerializer(pet).dict_display())
     if request.method == "GET":
         return Response({'pets': response})
     return Response({'message': 'Not Get Method'})
