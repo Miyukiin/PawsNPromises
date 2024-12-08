@@ -81,7 +81,7 @@ const AdoptPage = () => {
   // Page States
   const [pets, setPets] = useState<Pet[]>([]);
   const [displayedPets, setDisplayedPets] = useState<Pet[]>([]); // For search filter
-  const pageLimit = 5; // Number of pets to display per page
+  const pageLimit = 12; // Number of pets to display per page
   const pages = Math.ceil(displayedPets.length / pageLimit);
 
   // Filter States
@@ -148,11 +148,8 @@ const AdoptPage = () => {
 
     // Fetch pets
     getPets().then((data) => {
-      const sortedPets = data.sort((a: Pet, b: Pet) =>
-        a.name.localeCompare(b.name),
-      );
-      setPets(sortedPets);
-      setDisplayedPets(sortedPets);
+      setPets(sortPets(data));
+      setDisplayedPets(sortPets(data));
     });
 
     // Fetch filters
@@ -169,27 +166,28 @@ const AdoptPage = () => {
   }, []);
 
   // Sort pets
-  useEffect(() => {
-    setDisplayedPets((prevPets) => {
-      const sortedPets = prevPets.sort((a, b) => {
-        // Define the age order
-        const ageOrder = ["Puppy", "Young", "Adult", "Senior"];
+  const sortPets = (pets: Pet[]) => {
+    const sortedPets = pets.toSorted((a, b) => {
+      // Define the age order
+      const ageOrder = ["Puppy", "Young", "Adult", "Senior"];
 
-        // Sort based on the selected option ngl idk why this needs to be !==
-        return sortOption !== "ALPHABETICAL"
-          ? a.name.localeCompare(b.name)
-          : ageOrder.indexOf(a.age) - ageOrder.indexOf(b.age);
-      });
-      return sortedPets;
+      // Sort based on the selected option
+      return sortOption == "ALPHABETICAL"
+        ? a.name.localeCompare(b.name)
+        : ageOrder.indexOf(a.age) - ageOrder.indexOf(b.age);
     });
-  }, [sortOption, searchTerm]);
+    return sortedPets;
+  };
+  useEffect(() => {
+    setDisplayedPets(sortPets(displayedPets));
+  }, [sortOption]);
 
   // Search pets
   useEffect(() => {
     const filteredPets = pets.filter((pet) =>
       pet.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
-    setDisplayedPets(filteredPets);
+    setDisplayedPets(sortPets(filteredPets));
   }, [searchTerm]);
 
   // Filter pets
@@ -217,7 +215,7 @@ const AdoptPage = () => {
           (shelterFilter === "all" || pet.shelter_name === shelterFilter)
         );
       });
-      setDisplayedPets(filteredPets);
+      setDisplayedPets(sortPets(filteredPets));
     },
     filters.map((filter) => filter.filter),
   );
