@@ -182,43 +182,41 @@ const AdoptPage = () => {
     setDisplayedPets(sortPets(displayedPets));
   }, [sortOption]);
 
-  // Search pets
+  // Displaying pets with filters, search, and sorting
   useEffect(() => {
-    const filteredPets = pets.filter((pet) =>
+    let petsToDisplay = pets;
+
+    // Search pets
+    petsToDisplay = pets.filter((pet) =>
       pet.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
-    setDisplayedPets(sortPets(filteredPets));
-  }, [searchTerm]);
 
-  // Filter pets
-  useEffect(
-    () => {
-      // Update filter tags
-      const activeFilters = filters.map((filter) => {
-        if (filter.filter !== "all") {
-          return {
-            label: filter.name,
-            value: filter.filter,
-          };
-        }
-      });
-      setActiveFilters(activeFilters.filter((f) => f !== undefined));
+    // Update filter tags
+    const activeFilters = filters.map((filter) => {
+      if (filter.filter !== "all") {
+        return {
+          label: filter.name,
+          value: filter.filter,
+        };
+      }
+    });
+    setActiveFilters(activeFilters.filter((f) => f !== undefined));
 
-      // Filter pets
-      const filteredPets = pets.filter((pet) => {
-        return (
-          (animalFilter === "all" || pet.animal === animalFilter) &&
-          (breedFilter === "all" || pet.breed === breedFilter) &&
-          (ageFilter === "all" || pet.age === ageFilter) &&
-          (sizeFilter === "all" || pet.size === sizeFilter) &&
-          (genderFilter === "all" || pet.gender === genderFilter) &&
-          (shelterFilter === "all" || pet.shelter_name === shelterFilter)
-        );
-      });
-      setDisplayedPets(sortPets(filteredPets));
-    },
-    filters.map((filter) => filter.filter),
-  );
+    // Filter pets
+    petsToDisplay = petsToDisplay.filter((pet) => {
+      return (
+        (animalFilter === "all" || pet.animal === animalFilter) &&
+        (breedFilter === "all" || pet.breed === breedFilter) &&
+        (ageFilter === "all" || pet.age === ageFilter) &&
+        (sizeFilter === "all" || pet.size === sizeFilter) &&
+        (genderFilter === "all" || pet.gender === genderFilter) &&
+        (shelterFilter === "all" || pet.shelter_name === shelterFilter)
+      );
+    });
+
+    // Display sorted results
+    setDisplayedPets(sortPets(petsToDisplay));
+  }, [...filters.map((filter) => filter.filter), searchTerm]);
 
   return (
     <div className="flex flex-col mt-2 min-h-screen">
