@@ -1,9 +1,9 @@
 import axios from "axios";
-import {VolunteerFormData} from "../components/VolunteerFormSection"
+import { VolunteerFormData } from "../components/VolunteerFormSection";
 
 // API Initialization
-const API_BASE_URL = "http://localhost:8000/api/";
-const apiService = axios.create({ baseURL: API_BASE_URL });
+const API_BASE_URL = "http://localhost:8000/";
+const apiService = axios.create({ baseURL: API_BASE_URL + "api/" });
 
 // GET Endpoints
 
@@ -19,7 +19,10 @@ export async function getPet(id: number) {
 export async function getPetImages(id: number) {
   try {
     const response = await apiService.get(`/pet/images/?id=${id}`);
-    return response.data.pet;
+    const imageUrls = response.data.images.map(
+      (imageUrl: any) => API_BASE_URL + imageUrl,
+    );
+    return imageUrls;
   } catch (error) {
     throw error;
   }
