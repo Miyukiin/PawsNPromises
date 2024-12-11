@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('api/sample/', sample_api, name="sample_api"),
     path('api/pet/', get_pet, name="get_pet"),
+    path('api/pet/images/', get_pet_images, name="get_pet_images"),
     path('api/pets/', get_pets, name="get_pets"),
     path('api/pets/recommended/', get_recommended_pets, name="get_recommended_pets"),
     path('api/static/', get_static, name="get_static"),

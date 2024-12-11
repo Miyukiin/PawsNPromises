@@ -33,6 +33,19 @@ class PetSerializer:
             'imageSrc': self.imageSrc,
         }
 
+class ImageSerializer:
+    def __init__(self, image):
+        self.id = image.id
+        self.image = image.image
+        self.pet_id = image.pet
+
+    def dict_display(self):
+        return {
+            'id': self.id,
+            'image': self.image,
+            'pet_id': self.pet_id
+        }
+
 class ShelterSerializer:
     def __init__(self, shelter):
         self.id = shelter.id

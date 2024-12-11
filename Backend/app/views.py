@@ -1,10 +1,9 @@
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, JsonResponse
 from django.middleware.csrf import get_token
-from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from app.models import Pet, Animal, Breed, Age, Size, Gender, Shelter, Volunteer
-from app.serializers import PetSerializer, ShelterSerializer, VolunteerSerializer
+from app.serializers import PetSerializer, ImageSerializer, ShelterSerializer, VolunteerSerializer
 from app.utils import *
 
 import logging
@@ -35,6 +34,20 @@ def get_pets(request:HttpRequest):
         response.append(PetSerializer(pet).dict_display())
     if request.method == "GET":
         return Response({'pets': response})
+    return Response({'message': 'Not Get Method'})
+
+@api_view(['GET'])
+def get_pet_images(request:HttpRequest):
+    if request.method == "GET":
+        if 'id' not in request.GET:
+            return Response({'message': 'Payload format: ?id=pet_id'})
+        if not Pet.objects.filter(id=request.GET['id']).exists():
+            return Response({'message': 'Pet id does not exist'})
+
+        pet = Pet.objects.get(id=request.GET['id'])
+        images = [ImageSerializer(pet).image.url for pet in pet.images.all() ]
+
+        return Response({'images': images})
     return Response({'message': 'Not Get Method'})
 
 @api_view(['GET'])
@@ -106,9 +119,7 @@ def get_shelter(request:HttpRequest):
         return Response({'shelter': ShelterSerializer(shelter).dict_display()})
     return Response({'message': 'Not Get Method'})
 
-from django.middleware.csrf import get_token
-from django.http import JsonResponse
-from rest_framework.decorators import api_view
+
 
 @api_view(['GET'])
 def get_csrf_token(request: HttpRequest):
