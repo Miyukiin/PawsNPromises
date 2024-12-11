@@ -6,7 +6,6 @@ const API_BASE_URL = "http://localhost:8000/";
 const apiService = axios.create({ baseURL: API_BASE_URL + "api/" });
 
 // GET Endpoints
-
 export async function getPet(id: number) {
   try {
     const response = await apiService.get(`/pet/?id=${id}`);
@@ -19,10 +18,7 @@ export async function getPet(id: number) {
 export async function getPetImages(id: number) {
   try {
     const response = await apiService.get(`/pet/images/?id=${id}`);
-    const imageUrls = response.data.images.map(
-      (imageUrl: any) => API_BASE_URL + imageUrl,
-    );
-    return imageUrls;
+    return response.data.images;
   } catch (error) {
     throw error;
   }

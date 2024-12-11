@@ -1,8 +1,9 @@
 from app.models import Volunteer
+from django.http import HttpRequest
 
 
 class PetSerializer:
-    def __init__(self, pet):
+    def __init__(self, pet, request: HttpRequest | None = None):
         self.id = pet.id
         self.name = pet.name
         self.animal = pet.breed.animal_type
@@ -13,9 +14,7 @@ class PetSerializer:
         self.shelter = pet.shelter
         self.description = pet.description
         self.medical_description = pet.medical_description
-
-        # TODO: Implement proper images
-        self.imageSrc = "/image/default-image.png"
+        self.imageSrc = ImageSerializer(pet.images.first(), request).imageSrc
 
     def dict_display(self):
         return {
@@ -34,10 +33,17 @@ class PetSerializer:
         }
 
 class ImageSerializer:
-    def __init__(self, image):
+    def __init__(self, image, request: HttpRequest | None = None):
         self.id = image.id
         self.image = image.image
         self.pet_id = image.pet
+        self.request = request
+
+    @property
+    def imageSrc(self):
+        if not self.request:
+            return self.image.url
+        return f"{self.request.scheme}://{self.request.get_host()}{self.image.url}"
 
     def dict_display(self):
         return {

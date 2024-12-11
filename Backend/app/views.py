@@ -22,7 +22,8 @@ def get_pet(request:HttpRequest):
             return Response({'message': 'Pet id does not exist'})
 
         pet = Pet.objects.get(id=request.GET['id'])
-        response = PetSerializer(pet).dict_display()
+        response = PetSerializer(pet, request).dict_display()
+
         return Response({'pet': response})
     return Response({'message': 'Not Get Method'})
 
@@ -31,7 +32,7 @@ def get_pets(request:HttpRequest):
     pets = Pet.objects.all()
     response = []
     for index, pet in enumerate(pets):
-        response.append(PetSerializer(pet).dict_display())
+        response.append(PetSerializer(pet, request).dict_display())
     if request.method == "GET":
         return Response({'pets': response})
     return Response({'message': 'Not Get Method'})
@@ -45,7 +46,7 @@ def get_pet_images(request:HttpRequest):
             return Response({'message': 'Pet id does not exist'})
 
         pet = Pet.objects.get(id=request.GET['id'])
-        images = [ImageSerializer(pet).image.url for pet in pet.images.all() ]
+        images = [ImageSerializer(pet, request).imageSrc for pet in pet.images.all() ]
 
         return Response({'images': images})
     return Response({'message': 'Not Get Method'})
