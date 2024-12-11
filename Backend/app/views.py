@@ -159,7 +159,6 @@ def post_volunteer_information(request: HttpRequest):
     if request.method == "POST":
         try:
             formData = request.data['data']
-            logger.info(formData)
             serializer = VolunteerSerializer(formData=formData)
             
             if Volunteer.objects.filter(email=formData['email']).exists():
