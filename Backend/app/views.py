@@ -77,7 +77,7 @@ def get_recommended_pets(request:HttpRequest):
             reverse=True)
 
         # Get first 3 similar pets
-        recommended = [PetSerializer(pet).dict_display() for pet in recommended_pets][:3]
+        recommended = [PetSerializer(pet, request).dict_display() for pet in recommended_pets][:3]
 
         return Response({'pets': recommended})
     return Response({'message': 'Not Get Method'})
