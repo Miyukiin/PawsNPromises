@@ -224,7 +224,16 @@ const PetInfoPage = () => {
             </div>
 
             {/* Adopt Button */}
-            <div className="text-center text-white mt-4">
+            <div
+              className="text-center text-white mt-4"
+              onClick={() => {
+                // Open google forms in new tab
+                window.open(
+                  `https://docs.google.com/forms/d/e/1FAIpQLSeSUn-PI9KaqOhcrP5uE9qvetniSu7LV8boHZwX2npJm70_nQ/viewform?usp=pp_url&entry.567720647=${pet?.name}`,
+                  "_blank",
+                );
+              }}
+            >
               <Button
                 variant="contained"
                 style={{
