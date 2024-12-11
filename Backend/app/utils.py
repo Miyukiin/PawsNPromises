@@ -1,7 +1,7 @@
 from django.core.mail import send_mail, BadHeaderError
 from django.core.exceptions import ImproperlyConfigured
 
-def send_volunteer_confirmation_email(volunteer):
+def send_volunteer_appreciation_email(volunteer):
     """
     Sends an appreciation email to the volunteer's email.
 

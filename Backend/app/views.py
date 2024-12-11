@@ -167,7 +167,7 @@ def post_volunteer_information(request: HttpRequest):
 
             if serializer.is_valid():
                 volunteer = serializer.save()
-                send_volunteer_confirmation_email(volunteer)
+                send_volunteer_appreciation_email(volunteer)
                 return JsonResponse({'message': 'Volunteer information saved successfully.'}, status=200)
             return JsonResponse({"error": f"Error Serializing: {serializer.errors}"}, status=400)
         except Exception as e:
