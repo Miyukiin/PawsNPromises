@@ -81,3 +81,6 @@ class Volunteer(models.Model):
     email = models.EmailField(_("Email"), unique=True)
     contact_number = models.CharField(_("Contact Number"), max_length=50)
     address = models.CharField(_("Address"), max_length=50, null=False, blank=False)
+    
+    def __str__(self):
+        return f"{self.email}"
