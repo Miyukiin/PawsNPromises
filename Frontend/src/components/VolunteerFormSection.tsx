@@ -36,7 +36,7 @@ const VolunteerFormSection: React.FC = () => {
     if (!formData.firstName.trim()) newErrors.firstName = "First Name is required.";
     if (!formData.lastName.trim()) newErrors.lastName = "Last Name is required.";
     if (!formData.age.trim()) newErrors.age = "Age is required.";
-    else if (!formData.age || parseInt(formData.age) <= 0) newErrors.age = "Age must be a positive number.";
+    else if (!formData.age || parseInt(formData.age) <= 18) newErrors.age = "You must be above 18 to adopt.";
     if (!formData.email.trim()) newErrors.email = "Email is required.";
     if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Invalid email address.";
     if (!formData.contact.trim()) newErrors.contact = "Contact Number is required.";
@@ -141,8 +141,13 @@ const VolunteerFormSection: React.FC = () => {
             onChange={handleChangeAge}
             required = {true}
             placeholder= "Age"
-            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white`}
+            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white  ${
+              errors.age ? "border-red-500" : ""
+            }`}
           />
+          {errors.age && (
+            <span className="text-red-500 text-sm mt-1 block">{errors.age}</span>
+          )}
       </div>
 
         {/* Email Address */}
