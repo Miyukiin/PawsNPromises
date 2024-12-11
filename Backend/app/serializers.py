@@ -75,8 +75,8 @@ class VolunteerSerializer:
         if not self.lastName:
             self.errors['lastName'] = 'Last name is required.'
 
-        if not self.age.isdigit() or int(self.age) <= 0:
-            self.errors['age'] = 'Age must be a positive number.'
+        if not self.age.isdigit() or int(self.age) <= 18:
+            self.errors['age'] = 'Age must 18 above.'
 
         if not self.email or '@' not in self.email:
             self.errors['email'] = 'Invalid email address.'
