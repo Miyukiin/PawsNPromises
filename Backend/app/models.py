@@ -15,7 +15,6 @@ class Breed(models.Model):
 
     def __str__(self):
         return f"{self.name} | {self.animal_type}"
-    
 
 class Animal(models.Model):
     name = models.CharField(_("Animal Type"), max_length=10, choices=animals)
@@ -27,19 +26,19 @@ class Gender(models.Model):
     name = models.CharField(_("Gender"), max_length=10, choices=genders)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 class Age(models.Model):
     name = models.CharField(_("Age"), max_length=10, choices=ages)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 class Size(models.Model):
     name = models.CharField(_("Size"), max_length=10, choices=sizes)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 class Geolocation(models.Model):
     longitude = models.DecimalField(_("Longitude"), max_digits=9, decimal_places=6)
@@ -58,7 +57,7 @@ class Shelter(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 class Pet(models.Model):
     name = models.CharField(_("Name"), max_length=50)
@@ -73,7 +72,7 @@ class Pet(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 class Volunteer(models.Model):
     first_name = models.CharField(_("FName"), max_length=50, null=False, blank=False)

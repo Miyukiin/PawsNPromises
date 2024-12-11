@@ -5,16 +5,20 @@ import React from "react";
 interface PetCardProps {
   id: number;
   name: string;
-  type: string;
+  age: string;
   breed: string;
   imageSrc: string;
 }
 
-const PetCard: React.FC<PetCardProps> = ({ id, name, type, breed, imageSrc }) => {
+const PetCard: React.FC<PetCardProps> = ({
+  id,
+  name,
+  age,
+  breed,
+  imageSrc,
+}) => {
   return (
-    <div
-      className="border rounded-3xl shadow-lg overflow-hidden bg-white cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl w-full sm:w-[95%]"
-    >
+    <div className="border rounded-3xl shadow-lg overflow-hidden bg-white cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl w-full sm:w-[95%]">
       <div className="relative">
         <img
           src={imageSrc}
@@ -25,7 +29,7 @@ const PetCard: React.FC<PetCardProps> = ({ id, name, type, breed, imageSrc }) =>
       <div className="py-4 text-center">
         <h3 className="text-lg font-bold text-tertiary">{name}</h3>
         <p className="text-[13px] text-gray-600">
-          {type} | {breed}
+          {age} | {breed}
         </p>
       </div>
     </div>
