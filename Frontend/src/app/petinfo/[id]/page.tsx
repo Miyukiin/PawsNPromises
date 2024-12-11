@@ -13,7 +13,13 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { getPet, getRecommendedPets, getShelter } from "src/lib/utils";
+import {
+  API_BASE_URL,
+  getPet,
+  getPetImages,
+  getRecommendedPets,
+  getShelter,
+} from "src/lib/utils";
 
 interface Pet {
   id: number;
@@ -43,6 +49,7 @@ const PetInfoPage = () => {
   const { id } = useParams();
 
   const [pet, setPet] = useState<Pet>();
+  const [petImages, setPetImages] = useState<string[]>([]);
   const [shelter, setShelter] = useState<Shelter>();
   const [otherPets, setOtherPets] = useState<Pet[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,9 +74,10 @@ const PetInfoPage = () => {
     };
   }, []);
 
-  // Fetch shelter info
+  // Fetch images and shelter info
   useEffect(() => {
     if (pet) {
+      getPetImages(Number(pet?.id)).then((data) => setPetImages(data));
       getShelter(Number(pet?.shelter_id)).then((data) => setShelter(data));
     }
   }, [pet]);
