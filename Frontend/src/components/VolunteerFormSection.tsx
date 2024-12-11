@@ -1,11 +1,90 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css"; 
+import { checkEmailExists, postVolunteerInformation } from "src/lib/utils";
+
+  
+export interface VolunteerFormData {
+  firstName: string;
+  lastName: string;
+  age: string;
+  email: string;
+  contact: string;
+  address: string;
+}
 
 const VolunteerFormSection: React.FC = () => {
   useEffect(() => {
     AOS.init({ duration: 700, once: true });
   }, []);
+
+  // Initialize values to store the volunteer information upon submission.
+  const [formData, setFormData] = useState<VolunteerFormData>({
+    firstName: "",
+    lastName: "",
+    age: "",
+    email: "",
+    contact: "",
+    address: "",
+  });
+
+  // Form Level Valdidation.
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!formData.firstName.trim()) newErrors.firstName = "First Name is required.";
+    if (!formData.lastName.trim()) newErrors.lastName = "Last Name is required.";
+    if (!formData.age.trim()) newErrors.age = "Age is required.";
+    else if (!formData.age || parseInt(formData.age) <= 18) newErrors.age = "You must be above 18 to adopt.";
+    if (!formData.email.trim()) newErrors.email = "Email is required.";
+    if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Invalid email address.";
+    if (!formData.contact.trim()) newErrors.contact = "Contact Number is required.";
+    if (!formData.address.trim()) newErrors.address = "Address is required.";
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // When fields' value change, update formData with new value.
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+  };
+
+  // Handle negative values for Age Field. If value is less than zero, return 0, else use inputted user value.
+  const handleChangeAge = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: parseInt(value) < 0 ? "0" : value, 
+    }));
+    setErrors((prevErrors) => ({ ...prevErrors, age: "" })); // Clear errors for age
+  };
+
+  // Upon clicking submit button, open google forms with passed data. Also open modal for gratitude.
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Do not reload the page, which the default behavior when form is submitted.
+    // Validate that all fields of the form have data before proceeding.
+    if (validateForm()) {
+      const emailExists = await checkEmailExists(formData.email);
+
+      if (emailExists) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          email: "A volunteer with this email already exists.",
+        }));
+        return;
+      }
+      
+      console.log("Form Submitted Successfully:", formData);
+      postVolunteerInformation(formData as VolunteerFormData)
+    } else {
+      console.log("Form Validation Failed:", errors);
+    }
+  };
 
   return (
     <div
@@ -19,13 +98,21 @@ const VolunteerFormSection: React.FC = () => {
         WANT TO MAKE A PAWTASTIC DIFFERENCE? <br />
         <span className="text-4xl md:text-6xl font-extrabold">BE A VOLUNTEER TODAY</span>
       </h2>
-      <form className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <form className="grid grid-cols-1 md:grid-cols-3 gap-6"
+       onSubmit={handleSubmit}
+       >
         {/* First Name */}
         <div data-aos="fade-right">
           <label className="text-white text-sm mb-2 block">First Name:</label>
           <input
+            name="firstName"
             type="text"
-            className="w-full p-3 border-2 border-white bg-tertiary text-white rounded-md focus:outline-none focus:ring-2 focus:ring-white"
+            value={formData.firstName}
+            onChange={handleChange}
+            required = {true}
+            placeholder= "First Name"
+            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white`}
           />
         </div>
 
@@ -33,35 +120,66 @@ const VolunteerFormSection: React.FC = () => {
         <div data-aos="fade-right" data-aos-delay="200">
           <label className="text-white text-sm mb-2 block">Last Name:</label>
           <input
+            name="lastName"
             type="text"
-            className="w-full p-3 border-2 border-white bg-tertiary text-white rounded-md focus:outline-none focus:ring-2 focus:ring-white"
+            value={formData.lastName}
+            onChange={handleChange}
+            required = {true}
+            placeholder= "Last Name"
+            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white`}
           />
         </div>
 
         {/* Age */}
         <div data-aos="fade-left" data-aos-delay="400">
-          <label className="text-white text-sm mb-2 block">Age:</label>
-          <input
+        <label className="text-white text-sm mb-2 block">Age:</label>
+        <input
+            name="age"
             type="number"
-            className="w-full p-3 border-2 border-white bg-tertiary text-white rounded-md focus:outline-none focus:ring-2 focus:ring-white"
+            min="0"
+            value={formData.age}
+            onChange={handleChangeAge}
+            required = {true}
+            placeholder= "Age"
+            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white  ${
+              errors.age ? "border-red-500" : ""
+            }`}
           />
-        </div>
+          {errors.age && (
+            <span className="text-red-500 text-sm mt-1 block">{errors.age}</span>
+          )}
+      </div>
 
         {/* Email Address */}
         <div className="md:col-span-2" data-aos="fade-left" data-aos-delay="600">
           <label className="text-white text-sm mb-2 block">Email Address:</label>
           <input
+            name="email"
             type="email"
-            className="w-full p-3 border-2 border-white bg-tertiary text-white rounded-md focus:outline-none focus:ring-2 focus:ring-white"
+            value={formData.email}
+            onChange={handleChange}
+            required = {true}
+            placeholder= "Email Address"
+            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white ${
+              errors.email ? "border-red-500" : ""
+            }`} 
           />
+          {errors.email && (
+            <span className="text-red-500 text-sm mt-1 block">{errors.email}</span>
+          )}
         </div>
 
         {/* Contact Number */}
         <div data-aos="fade-right" data-aos-delay="800">
           <label className="text-white text-sm mb-2 block">Contact Number:</label>
           <input
+            name="contact"
             type="tel"
-            className="w-full p-3 border-2 border-white bg-tertiary text-white rounded-md focus:outline-none focus:ring-2 focus:ring-white"
+            value={formData.contact}
+            onChange={handleChange}
+            required = {true}
+            placeholder= "Contact Number"
+            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white`}
           />
         </div>
 
@@ -69,8 +187,13 @@ const VolunteerFormSection: React.FC = () => {
         <div className="md:col-span-3" data-aos="fade-left" data-aos-delay="1000">
           <label className="text-white text-sm block">Address:</label>
           <input
+            name="address"
             type="text"
-            className="w-full p-3 border-2 border-white bg-tertiary text-white rounded-md focus:outline-none focus:ring-2 focus:ring-white"
+            value={formData.address}
+            onChange={handleChange}
+            required = {true}
+            placeholder= "Address"
+            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white`}
           />
         </div>
 

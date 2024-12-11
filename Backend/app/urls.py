@@ -24,4 +24,7 @@ urlpatterns = [
     path('api/pets/recommended/', get_recommended_pets, name="get_recommended_pets"),
     path('api/static/', get_static, name="get_static"),
     path('api/shelter/', get_shelter, name="get_shelter"),
+    path("api/csrf-token/", get_csrf_token, name="get_csrf_token"),
+    path("api/volunteer/", post_volunteer_information, name="post_volunteer_information"),
+    path('api/volunteer/check-email/', check_email_exists, name='check_email_exists'),
 ]
