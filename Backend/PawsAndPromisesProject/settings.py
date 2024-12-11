@@ -26,7 +26,16 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# This sends emails to the console instead of actually sending them. Testing Only.
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"  # Gmail's SMTP host
+EMAIL_PORT = 587  # Gmail's SMTP port for TLS
+EMAIL_USE_TLS = True  # Use TLS for secure connection
+EMAIL_TIMEOUT = 60
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD') # App Password of EMAIL_USER
 
 
 # Application definition
@@ -48,6 +57,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',  # Frontend NextJs dns origin port 3000 default
     'http://127.0.0.1:3000',  # Alternate frontend ip origin port 3000 default
 ]
+
+ALLOWED_HOSTS = []
 
 CORS_ALLOW_CREDENTIALS = True
 
