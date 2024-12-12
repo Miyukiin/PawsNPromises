@@ -195,21 +195,15 @@ const AdoptPage = () => {
     setDisplayedPets(sortPets(displayedPets));
   }, [sortOption]);
 
-  // Search pets
-  const searchPets = (pets: Pet[]) => {
-     const searchPetsToDisplay = pets.filter((pet) =>
-      pet.name.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-    
-    return searchPetsToDisplay as Pet[]
-  };
 
   // Displaying pets with filters, search, and sorting
   useEffect(() => {
     let petsToDisplay = pets;
 
     // Search pets
-    petsToDisplay = searchPets(petsToDisplay)
+    petsToDisplay = pets.filter((pet) =>
+      pet.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
 
     // Update filter tags
     const activeFilters = filters.map((filter) => {
