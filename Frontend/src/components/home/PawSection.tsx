@@ -98,7 +98,10 @@ const PawSection = () => {
             data-aos="fade-up"
             data-aos-delay="100"
           >
-            <form className="flex items-center justify-center" onSubmit={handleOnSubmit}>
+            <form
+              className="flex items-center justify-center w-full"
+              onSubmit={handleOnSubmit}
+            >
               <InputBase
                 name="searchQuery"
                 placeholder="Search for paw friends..."
