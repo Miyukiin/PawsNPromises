@@ -3,7 +3,6 @@
 import React from "react";
 
 interface PetCardProps {
-  id: number;
   name: string;
   age: string;
   breed: string;
@@ -11,7 +10,6 @@ interface PetCardProps {
 }
 
 const PetCard: React.FC<PetCardProps> = ({
-  id,
   name,
   age,
   breed,
