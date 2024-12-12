@@ -1,3 +1,4 @@
+import random
 from django.http import HttpRequest, JsonResponse
 from django.middleware.csrf import get_token
 from rest_framework.response import Response
@@ -145,6 +146,68 @@ def get_csrf_token(request: HttpRequest):
             return JsonResponse({"error": f"Unable to generate CSRF token: {str(e)}"}, status=400)
     return JsonResponse({"error": "Method not supported. Allowed methods: \"GET\""}, status=405)
 
+@api_view(['GET'])
+def check_email_exists(request: HttpRequest):
+    """
+    Checks if an email already exists in the Volunteer database.
+
+    Args:
+        request (HttpRequest): Must contain an 'email' query parameter.
+    
+    Returns:
+        JsonResponse: A JSON response with the result of the email existence check.
+        - If successful: { "exists": true/false } (status 200).
+        - If email parameter is missing: { "error": "Email parameter is required." } (status 400).
+        - If method is unsupported: { "error": "Method not supported. Allowed methods: 'GET'" }  (status 405).
+    """
+    if request.method == "GET":
+        email = request.GET.get('email')
+        
+        if not email:
+            return JsonResponse({"error": "Email parameter is required."}, status=400)
+
+        exists = Volunteer.objects.filter(email=email).exists()
+        return JsonResponse({"exists": exists}, status=200)
+    
+    return JsonResponse({"error": "Method not supported. Allowed methods: \"GET\""}, status=405)
+
+@api_view(['GET'])
+def get_featured_pets(request: HttpRequest):
+    """
+    Returns 3 random featured pets each time the endpoint is called.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        JsonResponse: A JSON response containing:
+                - On success (status 200): A JSON response containing 3 random featured pets nested in pets.
+                - On empty database (status 404): A JSON response stating database is empty.
+                - On failure (status 400): A JSON response containing an error message.
+                - On unsupported methods (status 405): A JSON response indicating method not allowed.
+    """
+    if request.method == "GET":
+        try:
+            all_pets = list(Pet.objects.all())
+            
+            if len(all_pets) == 0:
+                return JsonResponse({"error": "No pets in database."}, status=404)
+            # Get 3 random pets, if all_pets < 3, get len(all_pets) random pets.
+            featured_pets = random.sample(all_pets, min(3, len(all_pets)))
+            serialized_pets = [PetSerializer(pet, request).dict_display() for pet in featured_pets]
+            return JsonResponse({'pets': serialized_pets}, status=200)
+        except Exception as e:
+            return JsonResponse({"error": f"Unable to get featured pets: {str(e)}"}, status=400)
+    return JsonResponse({"error": "Method not supported. Allowed methods: \"GET\""}, status=405)
+
+@api_view(['GET'])
+def sample_api(request:HttpRequest):
+    if request.method == "GET":
+        return Response({'message': 'Testing from Django Backend'})
+    return Response({'message': 'Not Get Method'})
+
+
+
 
 @api_view(['POST'])
 def post_volunteer_information(request: HttpRequest):
@@ -185,34 +248,3 @@ def post_volunteer_information(request: HttpRequest):
             return JsonResponse({"error": str(e)}, status=400) 
             
     return JsonResponse({"error": "Method not supported. Allowed methods: \"POST\""}, status=405)
-
-@api_view(['GET'])
-def check_email_exists(request: HttpRequest):
-    """
-    Checks if an email already exists in the Volunteer database.
-
-    Args:
-        request (HttpRequest): Must contain an 'email' query parameter.
-    
-    Returns:
-        JsonResponse: A JSON response with the result of the email existence check.
-        - If successful: { "exists": true/false } (status 200).
-        - If email parameter is missing: { "error": "Email parameter is required." } (status 400).
-        - If method is unsupported: { "error": "Method not supported. Allowed methods: 'GET'" }  (status 405).
-    """
-    if request.method == "GET":
-        email = request.GET.get('email')
-        
-        if not email:
-            return JsonResponse({"error": "Email parameter is required."}, status=400)
-
-        exists = Volunteer.objects.filter(email=email).exists()
-        return JsonResponse({"exists": exists}, status=200)
-    
-    return JsonResponse({"error": "Method not supported. Allowed methods: \"GET\""}, status=405)
-
-@api_view(['GET'])
-def sample_api(request:HttpRequest):
-    if request.method == "GET":
-        return Response({'message': 'Testing from Django Backend'})
-    return Response({'message': 'Not Get Method'})

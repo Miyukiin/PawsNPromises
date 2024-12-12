@@ -60,15 +60,6 @@ export async function getShelter(id: number) {
   }
 }
 
-export async function sampleGet() {
-  try {
-    const response = await apiService.get("/test/");
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-}
-
 async function getCsrfToken(): Promise<string> {
   try {
     const response = await apiService.get("/csrf-token/");
@@ -86,6 +77,24 @@ export async function checkEmailExists(email: string): Promise<boolean> {
     return response.data.exists;
   } catch (error) {
     throw error; // Unable to check email existence. Should return false?
+  }
+}
+
+export async function getFeaturedPets(){
+  try {
+    const response = await apiService.get(`/pets/featured/`);
+    return response.data.pets;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function sampleGet() {
+  try {
+    const response = await apiService.get("/test/");
+    return response.data;
+  } catch (error) {
+    throw error;
   }
 }
 

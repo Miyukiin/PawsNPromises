@@ -10,8 +10,9 @@ import { Select, MenuItem, InputBase, Button, IconButton } from "@mui/material";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { getPets, getStatic } from "src/lib/utils";
+import { useSearchParams } from "next/navigation";
 
-interface Pet {
+export interface Pet {
   id: number;
   name: string;
   animal: string;
@@ -72,6 +73,9 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 };
 
 const AdoptPage = () => {
+  // Search Parameter Retrieval
+  const searchParams =  useSearchParams();
+  
   const [sortOption, setSortOption] = useState("ALPHABETICAL");
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
@@ -150,6 +154,14 @@ const AdoptPage = () => {
     getPets().then((data) => {
       setPets(sortPets(data));
       setDisplayedPets(sortPets(data));
+      
+      // Handle search string parameter
+      const newSearchTerm = searchParams.get("petName") || "";
+      setSearchTerm(newSearchTerm);
+
+      // Handle search type parameter
+      const newAnimalFilter = searchParams.get('petType');
+      newAnimalFilter && setAnimalFilter(newAnimalFilter)
     });
 
     // Fetch filters
@@ -159,6 +171,7 @@ const AdoptPage = () => {
     getStatic("sizes").then((data) => setSizeFilterOptions(data));
     getStatic("genders").then((data) => setGenderFilterOptions(data));
     getStatic("shelters").then((data) => setShelterFilterOptions(data));
+
 
     return () => {
       AOS.refresh();
@@ -182,14 +195,21 @@ const AdoptPage = () => {
     setDisplayedPets(sortPets(displayedPets));
   }, [sortOption]);
 
+  // Search pets
+  const searchPets = (pets: Pet[]) => {
+     const searchPetsToDisplay = pets.filter((pet) =>
+      pet.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+    
+    return searchPetsToDisplay as Pet[]
+  };
+
   // Displaying pets with filters, search, and sorting
   useEffect(() => {
     let petsToDisplay = pets;
 
     // Search pets
-    petsToDisplay = pets.filter((pet) =>
-      pet.name.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
+    petsToDisplay = searchPets(petsToDisplay)
 
     // Update filter tags
     const activeFilters = filters.map((filter) => {
@@ -214,6 +234,7 @@ const AdoptPage = () => {
       );
     });
 
+    console.log(activeFilters)
     // Display sorted results
     setDisplayedPets(sortPets(petsToDisplay));
   }, [...filters.map((filter) => filter.filter), searchTerm]);

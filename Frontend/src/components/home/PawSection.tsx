@@ -6,27 +6,72 @@ import SearchIcon from "@mui/icons-material/Search";
 import { InputBase } from "@mui/material";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useRouter } from "next/navigation";
+import { getFeaturedPets } from "src/lib/utils";
+import { Pet } from "src/app/adopt/page";
+
+interface SearchData {
+  searchStringQuery: string,
+  searchTypeQuery: string,
+}
 
 const PawSection = () => {
+  const [featuredPets, setFeaturedPets] = useState<Pet[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchData, setSearchData] = useState<SearchData>({
+    searchStringQuery: "",
+    searchTypeQuery: "",
+  });
+  const router = useRouter()
 
   const handleAdoptClick = () => {
     setIsModalOpen(true);
-  };
+  };  
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
 
-  const otherPets = [
-    { id: 1, name: "Rexar", type: "Puppy", breed: "Doberman", imageSrc: "/image/default-image.png" },
-    { id: 2, name: "Bella", type: "Adult", breed: "Labrador", imageSrc: "/image/default-image.png" },
-    { id: 3, name: "Luna", type: "Puppy", breed: "Bulldog", imageSrc: "/image/default-image.png" },
-  ];
+  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const query = searchData.searchStringQuery;
+    router.push(`/adopt?petName=${query}`);
+  };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    const newValue = e.target.value
+    setSearchData((prev) => ({ ...prev, searchStringQuery: newValue }));
+  };
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) =>{
+    const newValue = e.currentTarget.value;
+    setSearchData((prev) => ({ ...prev, searchTypeQuery: newValue }));
+    const query = newValue;
+    router.push(`/adopt?petType=${query}`);
+  };
+
+  const otherPets = featuredPets.map((pet: Pet) => ({
+    id: pet.id,
+    name: pet.name,
+    age: pet.age,
+    breed: pet.breed,
+    imageSrc: pet.imageSrc,
+  }));
+  
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true }); 
+    const fetchFeaturedPets = async () => {
+      try {
+        const featured_pets = await getFeaturedPets();
+        setFeaturedPets(featured_pets); 
+      } catch (error) {
+        console.error("Failed to fetch featured pets:", error);
+      }
+    };
+  
+    fetchFeaturedPets();
+    AOS.init({ duration: 1000, once: true });
   }, []);
+  
 
   return (
     <div className="flex flex-col items-center justify-center bg-gray-100 flex-grow px-4 sm:px-6 lg:px-8">
@@ -53,26 +98,35 @@ const PawSection = () => {
             data-aos="fade-up"
             data-aos-delay="100"
           >
-            <InputBase
-              placeholder="Search for paw friends..."
-              className="flex-grow outline-none text-gray-600"
-              inputProps={{ "aria-label": "search" }}
-            />
-            <div className="flex items-center justify-center">
-              <SearchIcon className="text-tertiary" />
-            </div>
+            <form className="flex items-center justify-center" onSubmit={handleOnSubmit}>
+              <InputBase
+                name="searchQuery"
+                placeholder="Search for paw friends..."
+                className="flex-grow outline-none text-gray-600"
+                value={searchData.searchStringQuery}
+                inputProps={{ "aria-label": "search" }}
+                onChange={handleChange}
+              />
+              <div className="flex items-center justify-center">
+                <SearchIcon className="text-tertiary" />
+              </div>
+            </form>
           </div>
         </div>
 
         {/* Buttons Section */}
         <div className="flex justify-center mt-8">
           <button
+            onClick={handleClick}
+            value="Dog"
             className="bg-[#3BA07F] text-white font-medium py-4 px-8 text-xl rounded-lg mx-2 flex flex-col items-center justify-center hover:scale-110 transform transition-all duration-300"
           >
             <img src="image/dog.png" alt="Dog" className="mb-2 w-16 h-16 object-contain" />
             Dogs
           </button>
           <button
+            onClick={handleClick}
+            value="Cat"
             className="bg-[#3BA07F] text-white font-medium py-4 px-8 text-lg rounded-lg mx-2 flex flex-col items-center justify-center hover:scale-110 transform transition-all duration-300"
           >
             <img src="image/cat.png" alt="Cat" className="mb-2 w-16 h-16 object-contain" />
@@ -89,14 +143,14 @@ const PawSection = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
           {otherPets.map((pet, index) => (
             <React.Fragment key={pet.id}>
-              <Link href={`/petinfo`} passHref> {/* Temporarily link to petinfo page */}
+              <Link href={`/petinfo/${pet.id}`} key={pet.id}>
                 <div data-aos="flip-left">
                   <PetCard
+                    id={pet.id}
                     name={pet.name}
+                    age={pet.age}
                     breed={pet.breed}
                     imageSrc={pet.imageSrc}
-                    id={0}
-                    type={pet.type}
                   />
                 </div>
               </Link>
