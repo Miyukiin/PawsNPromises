@@ -145,23 +145,22 @@ const AdoptPage = () => {
   const handleClearFilter = (filter: { label: string; value: string }) => {
     setActiveFilters(activeFilters.filter((f) => f !== filter));
   };
-
+  
   // On mount
   useEffect(() => {
     AOS.init({ duration: 1000, once: false, easing: "ease-in" });
 
     // Fetch pets
     getPets().then((data) => {
+      // Process search params
+      const queryPetName = searchParams.get("petName") || "";
+      const queryPetType = searchParams.get("petType") || "all";
+  
+      setSearchTerm(queryPetName);
+      setAnimalFilter(queryPetType);
+
       setPets(sortPets(data));
       setDisplayedPets(sortPets(data));
-      
-      // Handle search string parameter
-      const newSearchTerm = searchParams.get("petName") || "";
-      setSearchTerm(newSearchTerm);
-
-      // Handle search type parameter
-      const newAnimalFilter = searchParams.get('petType');
-      newAnimalFilter && setAnimalFilter(newAnimalFilter)
     });
 
     // Fetch filters
