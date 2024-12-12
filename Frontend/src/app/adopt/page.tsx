@@ -370,7 +370,6 @@ const AdoptPage = () => {
                   <Link href={`/petinfo/${pet.id}`} key={pet.id}>
                     <div data-aos="flip-left">
                       <PetCard
-                        id={pet.id}
                         name={pet.name}
                         age={pet.age}
                         breed={pet.breed}
