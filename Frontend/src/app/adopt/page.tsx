@@ -234,7 +234,6 @@ const AdoptPage = () => {
       );
     });
 
-    console.log(activeFilters)
     // Display sorted results
     setDisplayedPets(sortPets(petsToDisplay));
   }, [...filters.map((filter) => filter.filter), searchTerm]);

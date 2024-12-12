@@ -121,8 +121,6 @@ def get_shelter(request:HttpRequest):
         return Response({'shelter': ShelterSerializer(shelter).dict_display()})
     return Response({'message': 'Not Get Method'})
 
-
-
 @api_view(['GET'])
 def get_csrf_token(request: HttpRequest):
     """
@@ -205,9 +203,6 @@ def sample_api(request:HttpRequest):
     if request.method == "GET":
         return Response({'message': 'Testing from Django Backend'})
     return Response({'message': 'Not Get Method'})
-
-
-
 
 @api_view(['POST'])
 def post_volunteer_information(request: HttpRequest):
