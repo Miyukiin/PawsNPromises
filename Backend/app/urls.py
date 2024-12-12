@@ -17,9 +17,13 @@ Including another URLconf
 from django.urls import path
 from .views import *
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('api/sample/', sample_api, name="sample_api"),
     path('api/pet/', get_pet, name="get_pet"),
+    path('api/pet/images/', get_pet_images, name="get_pet_images"),
     path('api/pets/', get_pets, name="get_pets"),
     path('api/pets/recommended/', get_recommended_pets, name="get_recommended_pets"),
     path('api/static/', get_static, name="get_static"),
@@ -27,4 +31,4 @@ urlpatterns = [
     path("api/csrf-token/", get_csrf_token, name="get_csrf_token"),
     path("api/volunteer/", post_volunteer_information, name="post_volunteer_information"),
     path('api/volunteer/check-email/', check_email_exists, name='check_email_exists'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

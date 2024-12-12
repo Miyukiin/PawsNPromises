@@ -1,12 +1,11 @@
 import axios from "axios";
-import {VolunteerFormData} from "../components/VolunteerFormSection"
+import { VolunteerFormData } from "../components/VolunteerFormSection";
 
 // API Initialization
-const API_BASE_URL = "http://localhost:8000/api/";
-const apiService = axios.create({ baseURL: API_BASE_URL });
+const API_BASE_URL = "http://localhost:8000/";
+const apiService = axios.create({ baseURL: API_BASE_URL + "api/" });
 
 // GET Endpoints
-
 export async function getPet(id: number) {
   try {
     const response = await apiService.get(`/pet/?id=${id}`);
@@ -15,8 +14,16 @@ export async function getPet(id: number) {
     throw error;
   }
 }
-// should return
-// { id: 1, name: "Rexar", type: "Puppy", breed: "Doberman", imageSrc: "/image/default-image.png" },
+
+export async function getPetImages(id: number) {
+  try {
+    const response = await apiService.get(`/pet/images/?id=${id}`);
+    return response.data.images;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getPets() {
   try {
     const response = await apiService.get("/pets/");
@@ -62,7 +69,7 @@ export async function sampleGet() {
   }
 }
 
-async function getCsrfToken (): Promise<string> {
+async function getCsrfToken(): Promise<string> {
   try {
     const response = await apiService.get("/csrf-token/");
     return response.data.csrfToken;
@@ -73,36 +80,35 @@ async function getCsrfToken (): Promise<string> {
 
 export async function checkEmailExists(email: string): Promise<boolean> {
   try {
-    const response = await apiService.get(`/volunteer/check-email/?email=${email}`); 
-    return response.data.exists; 
+    const response = await apiService.get(
+      `/volunteer/check-email/?email=${email}`,
+    );
+    return response.data.exists;
   } catch (error) {
     throw error; // Unable to check email existence. Should return false?
   }
 }
 
 // POST Endpoints
-export async function postVolunteerInformation(formData: VolunteerFormData){
+export async function postVolunteerInformation(formData: VolunteerFormData) {
   try {
+    const csrfToken = await getCsrfToken();
 
-    const csrfToken = await getCsrfToken()
-    
-    if(!csrfToken){
+    if (!csrfToken) {
       throw new Error("CSRF token is missing or invalid.");
     }
 
     await apiService.post(
-      "/volunteer/", 
-      {data: formData}, 
-      {headers: 
-        {
+      "/volunteer/",
+      { data: formData },
+      {
+        headers: {
           "X-CSRFToken": csrfToken,
           "Content-Type": "application/json",
-        }
-      }
+        },
+      },
     );
-
-  } 
-  catch (error) {
+  } catch (error) {
     throw error;
   }
 }
@@ -113,7 +119,6 @@ interface SamplePayload {
 
 export async function samplePost(payload: SamplePayload) {
   try {
-
     await apiService.post("/test/", payload);
   } catch (error) {
     throw error;
@@ -137,5 +142,3 @@ export async function sampleDelete(id: number) {
     throw error;
   }
 }
-
-

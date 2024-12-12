@@ -13,7 +13,14 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { getPet, getRecommendedPets, getShelter } from "src/lib/utils";
+import {
+  getPet,
+  getPetImages,
+  getRecommendedPets,
+  getShelter,
+} from "src/lib/utils";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
 interface Pet {
   id: number;
@@ -43,6 +50,7 @@ const PetInfoPage = () => {
   const { id } = useParams();
 
   const [pet, setPet] = useState<Pet>();
+  const [petImages, setPetImages] = useState<string[]>([]);
   const [shelter, setShelter] = useState<Shelter>();
   const [otherPets, setOtherPets] = useState<Pet[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,9 +75,10 @@ const PetInfoPage = () => {
     };
   }, []);
 
-  // Fetch shelter info
+  // Fetch images and shelter info
   useEffect(() => {
     if (pet) {
+      getPetImages(Number(pet?.id)).then((data) => setPetImages(data));
       getShelter(Number(pet?.shelter_id)).then((data) => setShelter(data));
     }
   }, [pet]);
@@ -78,14 +87,66 @@ const PetInfoPage = () => {
     <div className="flex flex-col min-h-screen items-center bg-lightgray font-sans">
       {/* Pet Image and Name Banner */}
       <div className="w-full mb-1">
-        <div className="w-full h-[400px] bg-black overflow-hidden">
-          <img
-            src="/image/petinfo-mainimage.png"
-            alt={pet?.name}
-            className="object-cover w-full h-full"
-            data-aos="fade-up"
-          />
-        </div>
+        <Carousel
+          additionalTransfrom={0}
+          arrows
+          autoPlaySpeed={1000}
+          className=""
+          centerMode={true}
+          containerClass="container-with-dots"
+          dotListClass=""
+          draggable
+          focusOnSelect={false}
+          infinite
+          itemClass=""
+          keyBoardControl
+          renderArrowsWhenDisabled={false}
+          renderButtonGroupOutside={false}
+          renderDotsOutside={false}
+          responsive={{
+            desktop: {
+              breakpoint: {
+                max: 3000,
+                min: 1024,
+              },
+              items: Math.min(petImages.length, 3),
+              partialVisibilityGutter: 40,
+            },
+            mobile: {
+              breakpoint: {
+                max: 464,
+                min: 0,
+              },
+              items: Math.min(petImages.length, 1),
+              partialVisibilityGutter: 30,
+            },
+            tablet: {
+              breakpoint: {
+                max: 1024,
+                min: 464,
+              },
+              items: Math.min(petImages.length, 2),
+              partialVisibilityGutter: 30,
+            },
+          }}
+          rewind={false}
+          rewindWithAnimation={false}
+          rtl={false}
+          shouldResetAutoplay
+          showDots={false}
+          sliderClass=""
+          slidesToSlide={1}
+        >
+          {petImages.map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              alt={pet?.name}
+              className="object-cover w-full h-[400px] pointer-events-none"
+              data-aos="fade-up"
+            />
+          ))}
+        </Carousel>
       </div>
 
       {/* Main Content */}
@@ -163,7 +224,16 @@ const PetInfoPage = () => {
             </div>
 
             {/* Adopt Button */}
-            <div className="text-center text-white mt-4">
+            <div
+              className="text-center text-white mt-4"
+              onClick={() => {
+                // Open google forms in new tab
+                window.open(
+                  `https://docs.google.com/forms/d/e/1FAIpQLSeSUn-PI9KaqOhcrP5uE9qvetniSu7LV8boHZwX2npJm70_nQ/viewform?usp=pp_url&entry.567720647=${pet?.name}`,
+                  "_blank",
+                );
+              }}
+            >
               <Button
                 variant="contained"
                 style={{
