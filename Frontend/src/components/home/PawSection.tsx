@@ -8,7 +8,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useRouter } from "next/navigation";
 import { getFeaturedPets } from "src/lib/utils";
-import { Pet } from "src/app/adopt/page";
+import { Pet } from "@/components/adopt/AdoptPageContent";
 
 interface SearchData {
   searchStringQuery: string,
