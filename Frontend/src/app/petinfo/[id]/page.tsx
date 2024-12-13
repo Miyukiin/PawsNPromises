@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import PetCard from "@/components/adopt/PetCard";
@@ -18,9 +18,13 @@ import {
   getPetImages,
   getRecommendedPets,
   getShelter,
+  getShelterGeolocation,
 } from "src/lib/utils";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import dynamic from "next/dynamic";
+import { LatLng } from "leaflet";
+
 
 interface Pet {
   id: number;
@@ -45,6 +49,11 @@ interface Shelter {
   link: string;
 }
 
+interface Geolocation{
+  latitude: number;
+  longitude: number;
+}
+
 const PetInfoPage = () => {
   // Catch slug
   const { id } = useParams();
@@ -52,6 +61,7 @@ const PetInfoPage = () => {
   const [pet, setPet] = useState<Pet>();
   const [petImages, setPetImages] = useState<string[]>([]);
   const [shelter, setShelter] = useState<Shelter>();
+  const [geolocation, setGeolocation] = useState<Geolocation>();
   const [otherPets, setOtherPets] = useState<Pet[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -75,11 +85,21 @@ const PetInfoPage = () => {
     };
   }, []);
 
+    // Workaround, Leaflet does not support SSR. Map component is CSR, if not loaded yet, map is loading p element.
+    const Map = useMemo(() => dynamic(
+      () => import('@/components/MapComponent'),
+      {
+          loading: () => <p>A map is loading</p>,
+          ssr: false
+      }
+  ), [geolocation])
+
   // Fetch images and shelter info
   useEffect(() => {
     if (pet) {
       getPetImages(Number(pet?.id)).then((data) => setPetImages(data));
       getShelter(Number(pet?.shelter_id)).then((data) => setShelter(data));
+      getShelterGeolocation(Number(pet?.shelter_id)).then((data) => setGeolocation(data));
     }
   }, [pet]);
 
@@ -317,11 +337,13 @@ const PetInfoPage = () => {
             </div>
           </div>
           <div className="flex-1 md:w-1/2" data-aos="fade-left">
-            <img
-              src="/image/map-image.png"
-              alt="Map showing Gora Manila Shelter"
-              className="w-full h-full rounded-md shadow"
-            />
+            <div id="map" style={{ height: "500px", width: "100%" }}>
+              {
+                (geolocation && geolocation.latitude && geolocation.longitude) 
+                  ? (<Map posix={new LatLng(geolocation.latitude, geolocation.longitude)} zoom={20} />) // Required so as to standardize which distance coordinate comes first.
+                  : <p> Map Loading... </p>
+              }
+            </div>
           </div>
         </div>
 

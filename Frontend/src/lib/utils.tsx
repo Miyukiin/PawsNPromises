@@ -89,6 +89,15 @@ export async function getFeaturedPets(){
   }
 }
 
+export async function getShelterGeolocation(id: number) {
+  try {
+    const response = await apiService.get(`/shelter-geolocation/?id=${id}`);
+    return response.data.shelter_geolocation;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function sampleGet() {
   try {
     const response = await apiService.get("/test/");

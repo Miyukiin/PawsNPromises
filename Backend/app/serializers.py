@@ -69,6 +69,21 @@ class ShelterSerializer:
             'link': self.link
         }
 
+class GeolocationSerializer:
+    def __init__(self, shelter_geolocation):
+        self.id = shelter_geolocation.id
+        self.latitude = shelter_geolocation.latitude
+        self.longitude = shelter_geolocation.longitude
+
+
+    def dict_display(self):
+        return {
+            'id': self.id,
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+        }
+
+
 class VolunteerSerializer:
     def __init__(self, formData):       
         self.firstName = formData.get('firstName', '').strip()

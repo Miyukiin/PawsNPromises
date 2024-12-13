@@ -3,8 +3,8 @@ from django.http import HttpRequest, JsonResponse
 from django.middleware.csrf import get_token
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from app.models import Pet, Animal, Breed, Age, Size, Gender, Shelter, Volunteer
-from app.serializers import PetSerializer, ImageSerializer, ShelterSerializer, VolunteerSerializer
+from app.models import Geolocation, Pet, Animal, Breed, Age, Size, Gender, Shelter, Volunteer
+from app.serializers import GeolocationSerializer, PetSerializer, ImageSerializer, ShelterSerializer, VolunteerSerializer
 from app.utils import *
 
 import logging
@@ -196,6 +196,42 @@ def get_featured_pets(request: HttpRequest):
             return JsonResponse({'pets': serialized_pets}, status=200)
         except Exception as e:
             return JsonResponse({"error": f"Unable to get featured pets: {str(e)}"}, status=400)
+    return JsonResponse({"error": "Method not supported. Allowed methods: \"GET\""}, status=405)
+
+
+@api_view(['GET'])
+def get_shelter_geolocation(request:HttpRequest):
+    """
+    Returns the geolocation of a shelter based on its ID.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        JsonResponse: A JSON response containing:
+            - On success (status 200): The shelter's geolocation nested under `shelter_geolocation`.
+            - If the shelter ID is missing (status 400): An error message indicating the correct payload format.
+            - If the shelter ID does not exist (status 404): An error message stating that the shelter ID does not exist.
+            - If the geolocation ID does not exist (status 404): An error message stating that the geolocation ID does not exist.
+            - On failure (status 400): An error message describing the failure.
+            - On unsupported methods (status 405): An error message indicating that the method is not allowed.
+    """
+    if request.method == "GET":
+        try:
+            if 'id' not in request.GET:
+                return JsonResponse({'error': 'Follow Payload format: ?id=shelter_id'}, status= 400)
+            
+            if not Shelter.objects.filter(id=request.GET['id']).exists():
+                return JsonResponse({'error': 'Shelter ID does not exist'}, status=404)
+            
+            if not Geolocation.objects.filter(id=request.GET['id']).exists():
+                return JsonResponse({'error': 'Geolocation ID does not exist'}, status=404)
+            
+            shelter_geolocation = Geolocation.objects.get(id=request.GET['id'])
+
+            return Response({'shelter_geolocation': GeolocationSerializer(shelter_geolocation).dict_display()})
+        except Exception as e:
+            return JsonResponse({"error": f"Unable to get shelter geolocation: {str(e)}"}, status=400)
     return JsonResponse({"error": "Method not supported. Allowed methods: \"GET\""}, status=405)
 
 @api_view(['GET'])

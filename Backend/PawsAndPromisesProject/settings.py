@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',  # Frontend NextJs dns origin port 3000 default
     'http://127.0.0.1:3000',  # Alternate frontend ip origin port 3000 default
+    'https://paws-n-promises.vercel.app',
 ]
 
 ALLOWED_HOSTS = []
