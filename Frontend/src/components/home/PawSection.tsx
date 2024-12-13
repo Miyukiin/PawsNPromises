@@ -69,12 +69,12 @@ const PawSection = () => {
     };
   
     fetchFeaturedPets();
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({ duration: 1000, once: false });
   }, []);
   
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-100 flex-grow px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col items-center justify-center bg-gray-100 flex-grow mt-2 px-4 sm:px-6 lg:px-8">
       {/* Welcome Section */}
       <div className="text-center mt-24 mt-[-380px]">
         <h1
@@ -143,7 +143,7 @@ const PawSection = () => {
         <h2 className="text-3xl font-bold text-center mt-8 mb-8 text-[#3BA07F]" data-aos="zoom-in">
           PAW FRIENDS FOR ADOPTION!
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
           {otherPets.map((pet, index) => (
             <React.Fragment key={pet.id}>
               <Link href={`/petinfo/${pet.id}`} key={pet.id}>

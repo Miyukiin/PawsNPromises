@@ -1,11 +1,10 @@
-
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
 const AdoptStepsSection: React.FC = () => {
   useEffect(() => {
-    AOS.init({ duration: 800, once: true });
+    AOS.init({ duration: 800, once: false });
   }, []);
 
   return (
@@ -69,7 +68,7 @@ const AdoptStepsSection: React.FC = () => {
           <img
             src="/image/pawsnpromises-logo.png"
             alt="Paws and Promises Logo"
-            className="w-full max-w-[442px] h-auto mx-auto object-contain"
+            className="w-full sm:w-64 md:w-80 lg:w-[442px] h-auto mx-auto object-contain"
           />
         </div>
       </div>
