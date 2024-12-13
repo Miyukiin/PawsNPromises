@@ -201,16 +201,31 @@ def get_featured_pets(request: HttpRequest):
 
 @api_view(['GET'])
 def get_shelter_geolocation(request:HttpRequest):
+    """
+    Returns the geolocation of a shelter based on its ID.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        JsonResponse: A JSON response containing:
+            - On success (status 200): The shelter's geolocation nested under `shelter_geolocation`.
+            - If the shelter ID is missing (status 400): An error message indicating the correct payload format.
+            - If the shelter ID does not exist (status 404): An error message stating that the shelter ID does not exist.
+            - If the geolocation ID does not exist (status 404): An error message stating that the geolocation ID does not exist.
+            - On failure (status 400): An error message describing the failure.
+            - On unsupported methods (status 405): An error message indicating that the method is not allowed.
+    """
     if request.method == "GET":
         try:
             if 'id' not in request.GET:
-                return Response({'message': 'Payload format: ?id=shelter_id'})
+                return JsonResponse({'error': 'Follow Payload format: ?id=shelter_id'}, status= 400)
             
             if not Shelter.objects.filter(id=request.GET['id']).exists():
-                return Response({'message': 'Shelter id does not exist'})
+                return JsonResponse({'error': 'Shelter ID does not exist'}, status=404)
             
             if not Geolocation.objects.filter(id=request.GET['id']).exists():
-                return Response({'message': 'Geolocation id does not exist'})
+                return JsonResponse({'error': 'Geolocation ID does not exist'}, status=404)
             
             shelter_geolocation = Geolocation.objects.get(id=request.GET['id'])
 
