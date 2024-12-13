@@ -59,16 +59,7 @@ const PawSection = () => {
   }));
   
   useEffect(() => {
-    const fetchFeaturedPets = async () => {
-      try {
-        const featured_pets = await getFeaturedPets();
-        setFeaturedPets(featured_pets); 
-      } catch (error) {
-        console.error("Failed to fetch featured pets:", error);
-      }
-    };
-  
-    fetchFeaturedPets();
+    getFeaturedPets().then((data) => {setFeaturedPets(data)}, () => console.log("error"));
     AOS.init({ duration: 1000, once: true });
   }, []);
   
