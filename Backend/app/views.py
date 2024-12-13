@@ -3,8 +3,8 @@ from django.http import HttpRequest, JsonResponse
 from django.middleware.csrf import get_token
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from app.models import Pet, Animal, Breed, Age, Size, Gender, Shelter, Volunteer
-from app.serializers import PetSerializer, ImageSerializer, ShelterSerializer, VolunteerSerializer
+from app.models import Geolocation, Pet, Animal, Breed, Age, Size, Gender, Shelter, Volunteer
+from app.serializers import GeolocationSerializer, PetSerializer, ImageSerializer, ShelterSerializer, VolunteerSerializer
 from app.utils import *
 
 import logging
@@ -196,6 +196,27 @@ def get_featured_pets(request: HttpRequest):
             return JsonResponse({'pets': serialized_pets}, status=200)
         except Exception as e:
             return JsonResponse({"error": f"Unable to get featured pets: {str(e)}"}, status=400)
+    return JsonResponse({"error": "Method not supported. Allowed methods: \"GET\""}, status=405)
+
+
+@api_view(['GET'])
+def get_shelter_geolocation(request:HttpRequest):
+    if request.method == "GET":
+        try:
+            if 'id' not in request.GET:
+                return Response({'message': 'Payload format: ?id=shelter_id'})
+            
+            if not Shelter.objects.filter(id=request.GET['id']).exists():
+                return Response({'message': 'Shelter id does not exist'})
+            
+            if not Geolocation.objects.filter(id=request.GET['id']).exists():
+                return Response({'message': 'Geolocation id does not exist'})
+            
+            shelter_geolocation = Geolocation.objects.get(id=request.GET['id'])
+
+            return Response({'shelter_geolocation': GeolocationSerializer(shelter_geolocation).dict_display()})
+        except Exception as e:
+            return JsonResponse({"error": f"Unable to get shelter geolocation: {str(e)}"}, status=400)
     return JsonResponse({"error": "Method not supported. Allowed methods: \"GET\""}, status=405)
 
 @api_view(['GET'])

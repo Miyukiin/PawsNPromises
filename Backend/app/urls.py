@@ -32,4 +32,5 @@ urlpatterns = [
     path("api/volunteer/", post_volunteer_information, name="post_volunteer_information"),
     path('api/volunteer/check-email/', check_email_exists, name='check_email_exists'),
     path('api/pets/featured/', get_featured_pets, name="get_featured_pets"),
+    path('api/shelter-geolocation/', get_shelter_geolocation, name="get_shelter_geolocation"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

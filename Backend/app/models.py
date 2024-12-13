@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ValidationError
 from django.utils.translation import gettext as _
 from static.models_resources import animals, breeds, genders, ages, sizes
 
@@ -41,8 +42,15 @@ class Size(models.Model):
         return f"{self.name}"
 
 class Geolocation(models.Model):
-    longitude = models.DecimalField(_("Longitude"), max_digits=9, decimal_places=6)
-    latitude = models.DecimalField(_("Latitude"), max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(_("Longitude"), max_digits=40, decimal_places=25)
+    latitude = models.DecimalField(_("Latitude"), max_digits=40, decimal_places=25)
+    
+    def clean(self):
+        # Custom validation for longitude and latitude
+        if not (-180 <= self.longitude <= 180):
+            raise ValidationError("Longitude must be between -180 and 180 degrees.")
+        if not (-90 <= self.latitude <= 90):
+            raise ValidationError("Latitude must be between -90 and 90 degrees.")
 
     def __str__(self):
         return f"Longitude: {self.longitude}, Latitude: {self.latitude}"
