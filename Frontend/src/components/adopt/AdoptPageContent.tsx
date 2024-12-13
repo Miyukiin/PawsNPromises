@@ -160,7 +160,9 @@ export interface Pet {
         setAnimalFilter(queryPetType);
   
         setPets(sortPets(data));
-        setDisplayedPets(sortPets(data));
+        if (searchParams.size == 0){
+          setDisplayedPets(sortPets(data));
+        }
       });
   
       // Fetch filters
@@ -241,7 +243,7 @@ export interface Pet {
     useEffect(() => {
       setPage(Math.max(page, 1));
     }, [page]);
-  
+    
     return (
       <div className="flex flex-col min-h-screen">
         {/* Main Content */}
