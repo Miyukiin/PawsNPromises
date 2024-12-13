@@ -148,7 +148,7 @@ export interface Pet {
     
     // On mount
     useEffect(() => {
-      AOS.init({ duration: 1000, once: false, easing: "ease-in" });
+      AOS.init({ duration: 1000, once: true, easing: "ease-in" });
   
       // Fetch pets
       getPets().then((data) => {
@@ -170,7 +170,6 @@ export interface Pet {
       getStatic("sizes").then((data) => setSizeFilterOptions(data));
       getStatic("genders").then((data) => setGenderFilterOptions(data));
       getStatic("shelters").then((data) => setShelterFilterOptions(data));
-  
   
       return () => {
         AOS.refresh();
@@ -244,9 +243,9 @@ export interface Pet {
     }, [page]);
   
     return (
-      <div className="flex flex-col mt-2 min-h-screen">
+      <div className="flex flex-col min-h-screen">
         {/* Main Content */}
-        <div className="flex flex-col sm:flex-row">
+        <div className="flex flex-col sm:flex-row flex-grow">
           {/* Left Sidebar - Filters */}
           <aside
             className={`${isSidebarOpen ? "block" : "hidden"} sm:block w-full sm:w-1/6 bg-lightgray px-4 py-12 border-b sm:border-r drop-shadow-2xl border-gray-300`}
@@ -380,67 +379,63 @@ export interface Pet {
                   ))}
             </div>
   
-            {/* Pagination Section */}
-            <div className="flex justify-center items-center mt-6 gap-4 w-full">
+          {/* Pagination Section */}
+          <div className="flex justify-center items-center mt-6 gap-4 w-full">
               <div className="relative font-semibold flex items-center border rounded-xl px-3 py-1 w-40 text-tertiary bg-white bg-opacity-50">
-                <Select
-                  value={page}
-                  onChange={(e) => setPage(Number(e.target.value))}
-                  variant="standard"
-                  disableUnderline
-                  className="font-medium text-tertiary w-full"
-                  IconComponent={ExpandMoreOutlinedIcon}
-                >
-                  {Array.from({ length: pages }, (_, i) => (
-                    <MenuItem key={i} value={i + 1}>
-                      Page {i + 1} of {pages}
-                    </MenuItem>
-                  ))}
-                </Select>
+                  <Select
+                      value={page}
+                      onChange={(e) => setPage(Number(e.target.value))}
+                      variant="standard"
+                      disableUnderline
+                      className="font-medium text-tertiary w-full"
+                      IconComponent={ExpandMoreOutlinedIcon}
+                  >
+                      {Array.from({ length: pages }, (_, i) => (
+                          <MenuItem key={i} value={i + 1}>
+                              Page {i + 1} of {pages}
+                          </MenuItem>
+                      ))}
+                  </Select>
               </div>
-  
               <Button
-                variant="contained"
-                style={{
-                  backgroundColor: "#3BA07F",
-                  color: "#FFF",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  borderRadius: "0.75rem",
-                  // Styling for disabled
-                  pointerEvents: page === 1 ? "none" : "auto",
-                  opacity: page === 1 ? 0.75 : 1,
-                }}
-                disabled={page === 1}
-                aria-label="Go to previous page"
-                onClick={() => {
-                  setPage((prev) => Math.max(prev - 1, 1));
-                }}
+                  variant="contained"
+                  style={{
+                      backgroundColor: "#3BA07F",
+                      color: "#FFF",
+                      textTransform: "none",
+                      fontWeight: "bold",
+                      borderRadius: "0.75rem",
+                      pointerEvents: page === 1 ? "none" : "auto",
+                      opacity: page === 1 ? 0.75 : 1,
+                  }}
+                  disabled={page === 1}
+                  aria-label="Go to previous page"
+                  onClick={() => {
+                      setPage((prev) => Math.max(prev - 1, 1));
+                  }}
               >
-                ← Back
+                  ← Back
               </Button>
-  
               <Button
-                variant="contained"
-                style={{
-                  backgroundColor: "#3BA07F",
-                  color: "#FFF",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  borderRadius: "0.75rem",
-                  // Styling for disabled
-                  pointerEvents: page === pages ? "none" : "auto",
-                  opacity: page === pages ? 0.75 : 1,
-                }}
-                disabled={page === pages}
-                aria-label="Go to next page"
-                onClick={() => {
-                  setPage((prev) => Math.min(prev + 1, pages));
-                }}
+                  variant="contained"
+                  style={{
+                      backgroundColor: "#3BA07F",
+                      color: "#FFF",
+                      textTransform: "none",
+                      fontWeight: "bold",
+                      borderRadius: "0.75rem",
+                      pointerEvents: page === pages ? "none" : "auto",
+                      opacity: page === pages ? 0.75 : 1,
+                  }}
+                  disabled={page === pages}
+                  aria-label="Go to next page"
+                  onClick={() => {
+                      setPage((prev) => Math.min(prev + 1, pages));
+                  }}
               >
-                Next →
+                  Next →
               </Button>
-            </div>
+          </div>
           </main>
         </div>
       </div>

@@ -1,9 +1,10 @@
+'use client';
+
 import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css"; 
 import { checkEmailExists, postVolunteerInformation } from "src/lib/utils";
 
-  
 export interface VolunteerFormData {
   firstName: string;
   lastName: string;
@@ -15,7 +16,13 @@ export interface VolunteerFormData {
 
 const VolunteerFormSection: React.FC = () => {
   useEffect(() => {
-    AOS.init({ duration: 700, once: true });
+    // Initialize AOS
+    AOS.init({ duration: 700, once: false });
+
+    // Refresh AOS whenever the component is rerendered or navigated back to
+    return () => {
+      AOS.refresh();
+    };
   }, []);
 
   // Initialize values to store the volunteer information upon submission.
@@ -80,7 +87,7 @@ const VolunteerFormSection: React.FC = () => {
       }
       
       console.log("Form Submitted Successfully:", formData);
-      postVolunteerInformation(formData as VolunteerFormData)
+      postVolunteerInformation(formData as VolunteerFormData);
     } else {
       console.log("Form Validation Failed:", errors);
     }
@@ -99,9 +106,8 @@ const VolunteerFormSection: React.FC = () => {
         <span className="text-4xl md:text-6xl font-extrabold">BE A VOLUNTEER TODAY</span>
       </h2>
 
-      <form className="grid grid-cols-1 md:grid-cols-3 gap-6"
-       onSubmit={handleSubmit}
-       >
+      <form className="grid grid-cols-1 md:grid-cols-3 gap-6" onSubmit={handleSubmit}>
+        {/* Form fields */}
         {/* First Name */}
         <div data-aos="fade-right">
           <label className="text-white text-sm mb-2 block">First Name:</label>
@@ -110,9 +116,9 @@ const VolunteerFormSection: React.FC = () => {
             type="text"
             value={formData.firstName}
             onChange={handleChange}
-            required = {true}
-            placeholder= "First Name"
-            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white`}
+            required
+            placeholder="First Name"
+            className="w-full p-3 border-2 border-white bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white"
           />
         </div>
 
@@ -124,33 +130,31 @@ const VolunteerFormSection: React.FC = () => {
             type="text"
             value={formData.lastName}
             onChange={handleChange}
-            required = {true}
-            placeholder= "Last Name"
-            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white`}
+            required
+            placeholder="Last Name"
+            className="w-full p-3 border-2 border-white bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white"
           />
         </div>
 
         {/* Age */}
         <div data-aos="fade-left" data-aos-delay="400">
-        <label className="text-white text-sm mb-2 block">Age:</label>
-        <input
+          <label className="text-white text-sm mb-2 block">Age:</label>
+          <input
             name="age"
             type="number"
             min="0"
             value={formData.age}
             onChange={handleChangeAge}
-            required = {true}
-            placeholder= "Age"
-            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white  ${
+            required
+            placeholder="Age"
+            className={`w-full p-3 border-2 border-white bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white ${
               errors.age ? "border-red-500" : ""
             }`}
           />
-          {errors.age && (
-            <span className="text-red-500 text-sm mt-1 block">{errors.age}</span>
-          )}
-      </div>
+          {errors.age && <span className="text-red-500 text-sm mt-1 block">{errors.age}</span>}
+        </div>
 
-        {/* Email Address */}
+        {/* Email */}
         <div className="md:col-span-2" data-aos="fade-left" data-aos-delay="600">
           <label className="text-white text-sm mb-2 block">Email Address:</label>
           <input
@@ -158,18 +162,16 @@ const VolunteerFormSection: React.FC = () => {
             type="email"
             value={formData.email}
             onChange={handleChange}
-            required = {true}
-            placeholder= "Email Address"
-            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white ${
+            required
+            placeholder="Email Address"
+            className={`w-full p-3 border-2 border-white bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white ${
               errors.email ? "border-red-500" : ""
-            }`} 
+            }`}
           />
-          {errors.email && (
-            <span className="text-red-500 text-sm mt-1 block">{errors.email}</span>
-          )}
+          {errors.email && <span className="text-red-500 text-sm mt-1 block">{errors.email}</span>}
         </div>
 
-        {/* Contact Number */}
+        {/* Contact */}
         <div data-aos="fade-right" data-aos-delay="800">
           <label className="text-white text-sm mb-2 block">Contact Number:</label>
           <input
@@ -177,9 +179,9 @@ const VolunteerFormSection: React.FC = () => {
             type="tel"
             value={formData.contact}
             onChange={handleChange}
-            required = {true}
-            placeholder= "Contact Number"
-            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white`}
+            required
+            placeholder="Contact Number"
+            className="w-full p-3 border-2 border-white bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white"
           />
         </div>
 
@@ -191,9 +193,9 @@ const VolunteerFormSection: React.FC = () => {
             type="text"
             value={formData.address}
             onChange={handleChange}
-            required = {true}
-            placeholder= "Address"
-            className={`w-full p-3 border-2 "border-white" bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white`}
+            required
+            placeholder="Address"
+            className="w-full p-3 border-2 border-white bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-white"
           />
         </div>
 
