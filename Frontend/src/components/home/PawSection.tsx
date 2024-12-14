@@ -35,7 +35,9 @@ const PawSection = () => {
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const query = searchData.searchStringQuery;
-    router.push(`/adopt?petName=${query}`);
+    if (query) {
+      router.push(`/adopt?petName=${query}`);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
