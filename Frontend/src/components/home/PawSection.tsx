@@ -101,9 +101,11 @@ const PawSection = () => {
                 inputProps={{ "aria-label": "search" }}
                 onChange={handleChange}
               />
-              <div className="flex items-center justify-center">
-                <SearchIcon className="text-tertiary" />
-              </div>
+              <button type="submit">
+                <div className="flex items-center justify-center">
+                  <SearchIcon className="text-tertiary" />
+                </div>
+              </button>
             </form>
           </div>
         </div>
