@@ -35,7 +35,9 @@ const PawSection = () => {
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const query = searchData.searchStringQuery;
-    router.push(`/adopt?petName=${query}`);
+    if (query) {
+      router.push(`/adopt?petName=${query}`);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
@@ -101,9 +103,11 @@ const PawSection = () => {
                 inputProps={{ "aria-label": "search" }}
                 onChange={handleChange}
               />
-              <div className="flex items-center justify-center">
-                <SearchIcon className="text-tertiary" />
-              </div>
+              <button type="submit">
+                <div className="flex items-center justify-center">
+                  <SearchIcon className="text-tertiary" />
+                </div>
+              </button>
             </form>
           </div>
         </div>
