@@ -26,7 +26,7 @@ const Map = (Map: MapProps) => {
   return (
     <MapContainer
       zoom= {Map.zoom}
-      center= {[Map.posix.lng, Map.posix.lat]} // For some reason, leaflet wanted longitude first before latitude despite being named latlng.
+      center= {Map.posix} // latlng.
       scrollWheelZoom= {false}
       style= {{height: "100%", width: "100%"}}
     >
@@ -34,7 +34,7 @@ const Map = (Map: MapProps) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={[Map.posix.lng, Map.posix.lat]} draggable={false} > {/* For some reason, leaflet wanted longitude first before latitude despite being named latlng.*/}
+      <Marker position={Map.posix} draggable={false} > {/* latlng.*/}
         <Popup>Placeholder Shelter Here</Popup>
       </Marker>
     </MapContainer>
