@@ -134,12 +134,12 @@ To get a local copy up and running follow these simple example steps.
    ```sh
    pip install -r requirements.txt
    ```
-7. Then create .env folder in backend directoy
+7. Then create .env folder in backend directory. (Not required as it is already included in the repo.)
    ```sh
    touch .env # Linux
    echo some_text > .env #Windows
    ```
-8. Then request the contents to be put into that env from me.
+8. Then request the contents to be put into that env from me. (Not required as it is already included in the repo.)
 9. Next, we setup our Frontend, navigate to our root Frontend directory where we have package.json.
      ```sh
      cd Frontend
@@ -161,6 +161,18 @@ To get a local copy up and running follow these simple example steps.
       Access the Django API via http://127.0.0.1:8000.
       Access the Next.js frontend via http://localhost:3000.
       Test the communication between the frontend and backend by accessing http://localhost:3000/api/sample.
+13. To make the project work with the database data, you will need to setup your SQL database. I recommend using XAMPP. You will also need to update your MySQL MariaDB version to the version that Django accepts because XAMPP ships with older versions of MariaDB.
+14. You can find the resources for MariaDB latest version here.
+      ```sh
+      https://mariadb.org/download/?t=mariadb
+      ```
+15. You can find the tutorial to upgrade your mysql here:
+      ```sh
+      https://www.youtube.com/watch?v=-GmyjYEfuzE
+      ```
+16. After setting up your SQL Database. run XAMPP, access phpMyAdmin from the interface by clicking admin.
+17. Create a database named paws_promises_table and import the paws_promises_table included in the repo's top directory to that database.
+18. You're done and everything should work fine.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
