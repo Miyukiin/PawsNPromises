@@ -11,15 +11,15 @@ backend/venv/
 backend/__pycache__/
 backend/*.pyc
 backend/db.sqlite3
-backend/static/
-backend/media/pet_images/
+# backend/static/
+# backend/media/pet_images/
 
 # Ignore Python bytecode files
 __pycache__/
 *.pyc
 
 # Shared ignores
-.env
+# .env
 .env.*
 .DS_Store
 Thumbs.db

@@ -11,7 +11,7 @@ class Image(models.Model):
         return f"{self.pet} Image DB ID: {self.pk}"
 
 class Breed(models.Model):
-    name = models.CharField(_("Breed Name"), max_length=50, choices=breeds)
+    name = models.CharField(_("Breed Name"), max_length=50, choices=breeds, unique=True)
     animal_type = models.ForeignKey("Animal", related_name='animal_type', blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
@@ -30,13 +30,13 @@ class Gender(models.Model):
         return f"{self.name}"
 
 class Age(models.Model):
-    name = models.CharField(_("Age"), max_length=10, choices=ages)
+    name = models.CharField(_("Age"), max_length=30, choices=ages)
 
     def __str__(self):
         return f"{self.name}"
 
 class Size(models.Model):
-    name = models.CharField(_("Size"), max_length=10, choices=sizes)
+    name = models.CharField(_("Size"), max_length=15, choices=sizes)
 
     def __str__(self):
         return f"{self.name}"
@@ -56,7 +56,7 @@ class Geolocation(models.Model):
         return f"Longitude: {self.longitude}, Latitude: {self.latitude}"
 
 class Shelter(models.Model):
-    name = models.CharField(_("Shelter Name"), max_length=50)
+    name = models.CharField(_("Shelter Name"), max_length=75)
     location = models.OneToOneField(Geolocation, related_name='shelter', on_delete=models.CASCADE)
     contact_number = models.CharField(_("Contact Number"), max_length=50)
     email = models.EmailField(_("Email"), unique=True)
@@ -74,8 +74,8 @@ class Pet(models.Model):
     age = models.ForeignKey(Age, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
     size = models.ForeignKey(Size, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
     shelter = models.ForeignKey(Shelter, related_name='pet', blank=True, null=True, on_delete=models.SET_NULL)
-    description = models.CharField(_("Pet Description"), max_length=100)
-    medical_description = models.CharField(_("Medical Description"), max_length=100)
+    description = models.CharField(_("Pet Description"), max_length=1000)
+    medical_description = models.CharField(_("Medical Description"), max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
