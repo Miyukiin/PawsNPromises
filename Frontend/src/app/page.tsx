@@ -13,7 +13,7 @@ export default function RedirectToHome() {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <p>Redirecting to /home...</p>
+      <p>Redirecting to home...</p>
     </div>
   );
 }
