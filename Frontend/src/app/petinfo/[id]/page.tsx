@@ -122,7 +122,7 @@ const PetInfoPage = () => {
   }, [pet]);
 
   return (
-    <div className="flex flex-col min-h-screen items-center bg-lightgray font-sans overflow-x-hidden no-scrollbar mt-8">
+    <div className="flex flex-col min-h-screen items-center bg-lightgray font-sans overflow-x-hidden no-scrollbar">
       {/* Pet Image and Name Banner */}
       <CarouselComponent items={petImages} />
 
