@@ -4,7 +4,15 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import PetCard from "@/components/adopt/PetCard";
-import { IconButton, Button } from "@mui/material";
+import {
+  IconButton,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
@@ -24,7 +32,6 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import dynamic from "next/dynamic";
 import { LatLng } from "leaflet";
-
 
 interface Pet {
   id: number;
@@ -49,7 +56,7 @@ interface Shelter {
   link: string;
 }
 
-interface Geolocation{
+interface Geolocation {
   latitude: number;
   longitude: number;
 }
@@ -66,6 +73,12 @@ const PetInfoPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAdoptClick = () => {
+    // Open Google Forms in a new tab
+    window.open(
+      `https://docs.google.com/forms/d/e/1FAIpQLSeSUn-PI9KaqOhcrP5uE9qvetniSu7LV8boHZwX2npJm70_nQ/viewform?usp=pp_url&entry.567720647=${pet?.name}`,
+      "_blank"
+    );
+    // Open the notification modal
     setIsModalOpen(true);
   };
 
@@ -77,29 +90,34 @@ const PetInfoPage = () => {
     AOS.init({ duration: 1000, once: false, easing: "ease-in" });
 
     // API Fetching
-    getPet(Number(id)).then((data) => setPet(data));
-    getRecommendedPets(Number(id)).then((data) => setOtherPets(data));
+    if (id) {
+      getPet(Number(id)).then((data) => setPet(data));
+      getRecommendedPets(Number(id)).then((data) => setOtherPets(data));
+    }
 
     return () => {
       AOS.refresh();
     };
-  }, []);
+  }, [id]);
 
-    // Workaround, Leaflet does not support SSR. Map component is CSR, if not loaded yet, map is loading p element.
-    const Map = useMemo(() => dynamic(
-      () => import('@/components/MapComponent'),
-      {
-          loading: () => <p>A map is loading</p>,
-          ssr: false
-      }
-  ), [geolocation])
+  // Workaround, Leaflet does not support SSR. Map component is CSR, if not loaded yet, map is loading p element.
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("@/components/MapComponent"), {
+        loading: () => <p>A map is loading</p>,
+        ssr: false,
+      }),
+    [geolocation]
+  );
 
   // Fetch images and shelter info
   useEffect(() => {
     if (pet) {
-      getPetImages(Number(pet?.id)).then((data) => setPetImages(data));
-      getShelter(Number(pet?.shelter_id)).then((data) => setShelter(data));
-      getShelterGeolocation(Number(pet?.shelter_id)).then((data) => setGeolocation(data));
+      getPetImages(Number(pet.id)).then((data) => setPetImages(data));
+      getShelter(Number(pet.shelter_id)).then((data) => setShelter(data));
+      getShelterGeolocation(Number(pet.shelter_id)).then((data) =>
+        setGeolocation(data)
+      );
     }
   }, [pet]);
 
@@ -171,11 +189,11 @@ const PetInfoPage = () => {
 
       {/* Main Content */}
       <div className="container p-6 justify-center">
-        <div className="bg-[#2DC593] mb-8 text-white py-8 rounded-xl flex items-center justify-between px-8">
-          <h1
-            className="text-4xl text-center font-normal flex-1"
-            data-aos="zoom-in"
-          >
+        <div
+          className="bg-[#2DC593] mb-8 text-white py-8 rounded-xl flex items-center justify-between px-8"
+          data-aos="zoom-in"
+        >
+          <h1 className="text-4xl text-center font-normal flex-1">
             <img
               src="/image/paw.png"
               alt="Paw"
@@ -244,21 +262,12 @@ const PetInfoPage = () => {
             </div>
 
             {/* Adopt Button */}
-            <div
-              className="text-center text-white mt-4"
-              onClick={() => {
-                // Open google forms in new tab
-                window.open(
-                  `https://docs.google.com/forms/d/e/1FAIpQLSeSUn-PI9KaqOhcrP5uE9qvetniSu7LV8boHZwX2npJm70_nQ/viewform?usp=pp_url&entry.567720647=${pet?.name}`,
-                  "_blank",
-                );
-              }}
-            >
+            <div className="text-center text-white mt-4">
               <Button
                 variant="contained"
                 style={{
-                  backgroundColor: "#F4CE14",
-                  color: "#1E1E1E",
+                  backgroundColor: "#2DC593", // Updated color
+                  color: "#FFFFFF", // Updated text color for better contrast
                   fontWeight: "bold",
                   padding: "16px 32px",
                   fontSize: "26px",
@@ -295,8 +304,12 @@ const PetInfoPage = () => {
               <h2 className="text-4xl font-normal text-darkgray">
                 {shelter?.name}
               </h2>
-              <div className="flex justify-ar">
-                <IconButton aria-label="Facebook" color="primary" size="large">
+              <div className="flex space-x-2">
+                <IconButton
+                  aria-label="Facebook"
+                  color="primary"
+                  size="large"
+                >
                   <FacebookOutlinedIcon className="text-primary h-12 w-12" />
                 </IconButton>
                 <IconButton
@@ -338,11 +351,17 @@ const PetInfoPage = () => {
           </div>
           <div className="flex-1 md:w-1/2" data-aos="fade-left">
             <div id="map" style={{ height: "500px", width: "100%" }}>
-              {
-                (geolocation && geolocation.latitude && geolocation.longitude) 
-                  ? (<Map posix={new LatLng(geolocation.latitude, geolocation.longitude)} zoom={20} />) // Required so as to standardize which distance coordinate comes first.
-                  : <p> Map Loading... </p>
-              }
+              {geolocation && geolocation.latitude && geolocation.longitude ? (
+                <Map
+                  posix={new LatLng(
+                    geolocation.latitude,
+                    geolocation.longitude
+                  )}
+                  zoom={20}
+                />
+              ) : (
+                <p> Map Loading... </p>
+              )}
             </div>
           </div>
         </div>
@@ -359,7 +378,7 @@ const PetInfoPage = () => {
             {otherPets.map((pet, index) => (
               <React.Fragment key={pet.id}>
                 <Link href={`/petinfo/${pet.id}`} passHref>
-                  <div data-aos="flip-left">
+                  <div data-aos="flip-left" className="cursor-pointer">
                     <PetCard
                       name={pet.name}
                       age={pet.age}
@@ -389,6 +408,40 @@ const PetInfoPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Adoption Notification Modal */}
+      <Dialog
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        aria-labelledby="adoption-notification-title"
+        aria-describedby="adoption-notification-description"
+      >
+        <DialogTitle id="adoption-notification-title">
+        ✅ Adoption Confirmation  
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="adoption-notification-description">
+            Please ensure you have filled out the adoption form completely and
+            accurately. Thank you for adopting responsibly 🐱🐶
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+                  <Button
+                    onClick={handleCloseModal}
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "#2DC593",
+                      "&:hover": {
+                        backgroundColor: "#1EAE85", // Slightly darker shade for hover effect
+                      },
+                      color: "#FFFFFF", // Text color
+                      fontWeight: "bold", // Make text bold
+                    }}
+                  >
+                    OK
+                  </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
