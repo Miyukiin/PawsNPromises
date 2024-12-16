@@ -59,7 +59,7 @@ CORS_ALLOWED_ORIGINS = [
     'https://paws-n-promises.vercel.app',
 ]
 
-ALLOWED_HOSTS = ['https://paws-n-promises.vercel.app']
+ALLOWED_HOSTS = ['paws-n-promises.vercel.app']
 
 CORS_ALLOW_CREDENTIALS = True
 
