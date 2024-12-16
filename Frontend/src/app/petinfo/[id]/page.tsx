@@ -266,7 +266,7 @@ const PetInfoPage = () => {
                   <LocationOnOutlinedIcon className="mr-3 h-8 w-8 text-primary" />
                   <span className="text-xl font-semibold">Location</span>
                 </p>
-                <p className="text-gray-600 ml-11 text-lg">Lorem Ipsum Dolor</p>
+                <p className="text-gray-600 ml-11 text-lg">Metro Manila Province</p>
               </div>
               <div className="w-full bg-darkgray bg-opacity-20 h-[2px]"></div>
               <div>
