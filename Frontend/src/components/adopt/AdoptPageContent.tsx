@@ -179,7 +179,12 @@ export default function AdoptPageContent() {
   const sortPets = (pets: Pet[]) => {
     const sortedPets = pets.toSorted((a, b) => {
       // Define the age order
-      const ageOrder = ["Puppy", "Young", "Adult", "Senior"];
+      const ageOrder = [
+        "Puppy | Kitten (0 - 1 Year)",
+        "Young (1 - 3 Years)",
+        "Adult (3 - 7 Years)",
+        "Senior (7+ Years)",
+      ];
 
       // Sort based on the selected option
       return sortOption == "ALPHABETICAL"
