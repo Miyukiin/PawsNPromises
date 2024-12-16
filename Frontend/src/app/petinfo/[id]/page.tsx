@@ -32,6 +32,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import dynamic from "next/dynamic";
 import { LatLng } from "leaflet";
+import CarouselComponent from "@/components/CarouselComponent";
 
 interface Pet {
   id: number;
@@ -124,68 +125,7 @@ const PetInfoPage = () => {
   return (
     <div className="flex flex-col min-h-screen items-center bg-lightgray font-sans">
       {/* Pet Image and Name Banner */}
-      <div className="w-full mb-1">
-        <Carousel
-          additionalTransfrom={0}
-          arrows
-          autoPlaySpeed={1000}
-          className=""
-          centerMode={true}
-          containerClass="container-with-dots"
-          dotListClass=""
-          draggable
-          focusOnSelect={false}
-          infinite
-          itemClass=""
-          keyBoardControl
-          renderArrowsWhenDisabled={false}
-          renderButtonGroupOutside={false}
-          renderDotsOutside={false}
-          responsive={{
-            desktop: {
-              breakpoint: {
-                max: 3000,
-                min: 1024,
-              },
-              items: Math.min(petImages.length, 3),
-              partialVisibilityGutter: 40,
-            },
-            mobile: {
-              breakpoint: {
-                max: 464,
-                min: 0,
-              },
-              items: Math.min(petImages.length, 1),
-              partialVisibilityGutter: 30,
-            },
-            tablet: {
-              breakpoint: {
-                max: 1024,
-                min: 464,
-              },
-              items: Math.min(petImages.length, 2),
-              partialVisibilityGutter: 30,
-            },
-          }}
-          rewind={false}
-          rewindWithAnimation={false}
-          rtl={false}
-          shouldResetAutoplay
-          showDots={false}
-          sliderClass=""
-          slidesToSlide={1}
-        >
-          {petImages.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt={pet?.name}
-              className="object-cover w-full h-[400px] pointer-events-none"
-              data-aos="fade-up"
-            />
-          ))}
-        </Carousel>
-      </div>
+      <CarouselComponent items={petImages} />
 
       {/* Main Content */}
       <div className="container p-6 justify-center">
