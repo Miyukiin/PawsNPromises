@@ -191,7 +191,7 @@ const PetInfoPage = () => {
               src={image}
               alt={pet?.name}
               className="object-cover w-full h-[400px] pointer-events-none"
-
+              data-aos="fade-up"
             />
           ))}
         </Carousel>
