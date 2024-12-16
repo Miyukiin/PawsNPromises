@@ -356,12 +356,14 @@ const PetInfoPage = () => {
         aria-describedby="adoption-notification-description"
       >
         <DialogTitle id="adoption-notification-title">
-        ✅ Adoption Confirmation  
+        Thank you, adopter!  
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="adoption-notification-description">
-            Please ensure you have filled out the adoption form completely and
-            accurately. Thank you for adopting responsibly 🐱🐶
+            Please ensure to have filled out the adoption form completely and
+            accurately. Upon submission of the forms, expect to hear from us soon regarding {pet?.name}.
+            
+            Thank you for adopting responsibly 🐱🐶
           </DialogContentText>
         </DialogContent>
         <DialogActions>
