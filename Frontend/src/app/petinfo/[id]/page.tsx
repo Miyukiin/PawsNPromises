@@ -66,7 +66,7 @@ const PetInfoPage = () => {
   const { id } = useParams();
 
   const [pet, setPet] = useState<Pet>();
-  const [petImages, setPetImages] = useState<string[]>([]);
+  const [petImages, setPetImages] = useState<HTMLImageElement[]>([]);
   const [shelter, setShelter] = useState<Shelter>();
   const [geolocation, setGeolocation] = useState<Geolocation>();
   const [otherPets, setOtherPets] = useState<Pet[]>([]);
@@ -113,7 +113,18 @@ const PetInfoPage = () => {
   // Fetch images and shelter info
   useEffect(() => {
     if (pet) {
-      getPetImages(Number(pet.id)).then((data) => setPetImages(data));
+      getPetImages(Number(pet.id)).then((data) => {
+        const images = data.map((image: string, index: number) => (
+          <img
+            key={index}
+            src={image}
+            alt={pet?.name}
+            className="object-cover w-full h-[400px] pointer-events-none"
+            data-aos="fade-up"
+          />
+        ));
+        setPetImages(images);
+      });
       getShelter(Number(pet.shelter_id)).then((data) => setShelter(data));
       getShelterGeolocation(Number(pet.shelter_id)).then((data) =>
         setGeolocation(data)
@@ -175,15 +186,7 @@ const PetInfoPage = () => {
           sliderClass=""
           slidesToSlide={1}
         >
-          {petImages.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt={pet?.name}
-              className="object-cover w-full h-[400px] pointer-events-none"
-              data-aos="fade-up"
-            />
-          ))}
+          {petImages && petImages.length > 0 ? petImages : <div />}
         </Carousel>
       </div>
 
