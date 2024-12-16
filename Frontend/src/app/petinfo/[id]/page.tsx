@@ -371,9 +371,9 @@ const PetInfoPage = () => {
                     onClick={handleCloseModal}
                     variant="contained"
                     sx={{
-                      backgroundColor: "#2DC593",
+                      backgroundColor: "#F4CE14",
                       "&:hover": {
-                        backgroundColor: "#1EAE85", // Slightly darker shade for hover effect
+                        backgroundColor: "#EAC617", // Slightly darker shade for hover effect
                       },
                       color: "#FFFFFF", // Text color
                       fontWeight: "bold", // Make text bold
