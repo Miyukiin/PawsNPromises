@@ -321,7 +321,7 @@ export default function AdoptPageContent() {
           >
             <div className="relative flex items-center border rounded-xl px-4 py-2 sm:w-2/6 bg-white bg-opacity-50">
               <div className="flex flex-col w-full">
-                <span className="text-gray-600 text-sm">Sort by</span>
+                <span className="text-gray-600 text-sm">Sort by (Ascending)</span>
                 <Select
                   value={sortOption}
                   onChange={(e) => setSortOption(e.target.value)}
