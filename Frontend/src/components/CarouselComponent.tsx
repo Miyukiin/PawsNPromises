@@ -20,7 +20,7 @@ const CarouselComponent: React.FC<DynamicCarouselProps> = ({ items }) => {
   }
 
   return (
-    <div className="w-full mb-1">
+    <div className="w-full mb-1 mt-6">
         <DynamicCarousel
           additionalTransfrom={0}
           arrows
