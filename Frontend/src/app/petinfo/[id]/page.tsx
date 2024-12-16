@@ -87,14 +87,13 @@ const PetInfoPage = () => {
   };
 
   useEffect(() => {
-    AOS.init({ duration: 1000, once: false, easing: "ease-in" });
-
-    // API Fetching
+    AOS.init({ duration: 1000, once: true, easing: "ease-in" });
+  
     if (id) {
       getPet(Number(id)).then((data) => setPet(data));
       getRecommendedPets(Number(id)).then((data) => setOtherPets(data));
     }
-
+  
     return () => {
       AOS.refresh();
     };
@@ -122,7 +121,7 @@ const PetInfoPage = () => {
   }, [pet]);
 
   return (
-    <div className="flex flex-col min-h-screen items-center bg-lightgray font-sans">
+    <div className="flex flex-col min-h-screen items-center bg-lightgray font-sans overflow-x-hidden no-scrollbar">
       {/* Pet Image and Name Banner */}
       <div className="w-full mb-1">
         <Carousel
@@ -197,13 +196,13 @@ const PetInfoPage = () => {
             <img
               src="/image/paw.png"
               alt="Paw"
-              className="inline-block w-12 h-12"
+              className="inline-block w-10 h-10"
             />{" "}
             Meet <span className="text-white font-bold">{pet?.name}!</span>{" "}
             <img
               src="/image/paw.png"
               alt="Paw"
-              className="inline-block w-12 h-12"
+              className="inline-block w-10 h-10"
             />
           </h1>
         </div>
@@ -278,14 +277,14 @@ const PetInfoPage = () => {
                 data-aos="fade-up"
               >
                 <img
-                  src="/image/paw2.png"
-                  alt="Paw2"
+                  src="/image/paw.png"
+                  alt="Paw"
                   className="inline-block w-8 h-8"
                 />
                 <span>ADOPT {pet?.name.toUpperCase()}</span>
                 <img
-                  src="/image/paw2.png"
-                  alt="Paw2"
+                  src="/image/paw.png"
+                  alt="Paw"
                   className="inline-block w-8 h-8"
                 />
               </Button>

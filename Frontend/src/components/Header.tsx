@@ -41,16 +41,18 @@ const Header: React.FC = () => {
   return (
     <header className="bg-white shadow-md fixed top-0 left-0 right-0 z-10">
       <div className="flex justify-between items-center px-4 py-4 md:px-12">
-        {/* Leftmost Logo (Now non-clickable) */}
+        {/* Leftmost Logo (Now clickable, redirects to home) */}
         <div className="flex items-center">
-          <Image
-            src="/image/header-pawsnpromises.png"
-            alt="Paws and Promises Logo"
-            width={300}
-            height={120}
-            priority
-            className="w-auto h-auto max-w-[200px] md:max-w-[350px]"
-          />
+          <Link href="/" aria-label="Go to Home">
+            <Image
+              src="/image/header-pawsnpromises.png"
+              alt="Paws and Promises Logo"
+              width={300}
+              height={120}
+              priority
+              className="w-auto h-auto max-w-[200px] md:max-w-[350px]"
+            />
+          </Link>
         </div>
 
         {/* Navigation Buttons on Large Screens */}

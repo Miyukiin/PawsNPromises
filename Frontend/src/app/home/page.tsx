@@ -1,7 +1,7 @@
-"use client";  
+"use client";
 
 import React, { useEffect } from "react";
-import AOS from "aos"; 
+import AOS from "aos";
 import "aos/dist/aos.css";
 import Header from "@/components/home/Header";
 import PawSection from "@/components/home/PawSection";
@@ -11,17 +11,15 @@ import VolunteerFormSection from "@/components/VolunteerFormSection";
 
 const AboutPage: React.FC = () => {
   useEffect(() => {
-    // Initialize AOS only once when the component is mounted
     AOS.init({ duration: 1000, once: true, easing: "ease-in" });
 
-    // Optionally, refresh AOS on component unmount or page navigation.
     return () => {
       AOS.refresh();
     };
   }, []);
 
   return (
-    <div className="flex flex-col w-full h-full overflow-x-hidden"> {/* Prevent horizontal scroll */}
+    <div className="flex flex-col w-full h-full overflow-x-hidden no-scrollbar">
       <div className="flex-1 flex items-center justify-center">
         <Header />
       </div>
