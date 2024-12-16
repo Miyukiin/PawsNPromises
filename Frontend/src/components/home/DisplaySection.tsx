@@ -10,7 +10,7 @@ const DisplaySection: React.FC = () => {
 
   return (
     <div
-      className="flex flex-col items-center justify-center mt-4 mb-4 sm:mt-6 sm:mb-6 bg-[#379777] flex-grow"
+      className="flex flex-col items-center justify-center bg-[#379777] flex-grow"
       data-aos="fade-up" 
     >
       <div className="flex flex-col md:flex-row items-center justify-center py-4 px-4 sm:py-6 sm:px-6 bg-[#379777] w-full">

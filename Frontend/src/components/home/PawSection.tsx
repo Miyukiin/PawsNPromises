@@ -67,7 +67,7 @@ const PawSection = () => {
   
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-100 flex-grow mt-2 px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col items-center justify-center bg-gray-100 flex-grow px-4 sm:px-6 lg:px-8 py-4">
       {/* Welcome Section */}
       <div className="text-center mt-24 mt-[-380px]">
         <h1
