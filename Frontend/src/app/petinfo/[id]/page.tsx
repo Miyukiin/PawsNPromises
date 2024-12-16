@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import PetCard from "@/components/adopt/PetCard";
@@ -121,11 +121,21 @@ const PetInfoPage = () => {
     }
   }, [pet]);
 
+  // Use the ref provided by react-multi-carousel to manually trigger a re-render when the data is fetched.
+  const carouselRef = useRef<Carousel | null>(null);
+
+  useEffect(() => {
+    if (carouselRef.current) {
+      (carouselRef.current as any).reCalculate?.();
+    }
+  }, [petImages]);
+
   return (
     <div className="flex flex-col min-h-screen items-center bg-lightgray font-sans">
       {/* Pet Image and Name Banner */}
       <div className="w-full mb-1">
         <Carousel
+          ref={carouselRef}
           additionalTransfrom={0}
           arrows
           autoPlaySpeed={1000}
@@ -134,7 +144,7 @@ const PetInfoPage = () => {
           containerClass="container-with-dots"
           dotListClass=""
           draggable
-          focusOnSelect={false}
+          focusOnSelect={true}
           infinite
           itemClass=""
           keyBoardControl
