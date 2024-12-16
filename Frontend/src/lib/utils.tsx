@@ -2,8 +2,8 @@ import axios from "axios";
 import { VolunteerFormData } from "../components/VolunteerFormSection";
 
 // API Initialization
-//const API_BASE_URL = "http://localhost:8000/";
-const API_BASE_URL = 'https://miyukiin2.pythonanywhere.com/'
+const API_BASE_URL = "http://localhost:8000/";
+//const API_BASE_URL = 'https://miyukiin2.pythonanywhere.com/'
 const apiService = axios.create({ baseURL: API_BASE_URL + "api/" });
 
 // GET Endpoints
