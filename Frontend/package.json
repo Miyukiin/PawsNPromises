@@ -19,7 +19,7 @@
     "framer-motion": "^11.13.1",
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
-    "next": "15.0.3",
+    "next": "15.0.7",
     "react": "19.0.0-rc-69d4b800-20241021",
     "react-dom": "19.0.0-rc-69d4b800-20241021",
     "react-feather": "^2.0.10",
